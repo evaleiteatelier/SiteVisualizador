@@ -64,8 +64,16 @@
         </div>
 
         <!-- Mensagem de Erro (escondida por defeito) -->
-        <div id="error-message" class="hidden text-center text-red-500 py-10">
-            <p>Ocorreu um erro ao carregar os produtos. Por favor, tente novamente mais tarde.</p>
+        <div id="error-message" class="hidden py-10">
+            <div class="flex flex-col items-center text-center text-red-500">
+                <p class="text-xl font-semibold mb-2">Ocorreu um erro ao carregar os produtos.</p>
+                <p id="error-details"
+                    class="bg-red-50 p-4 rounded text-sm text-red-800 border border-red-200 mt-4 max-w-lg w-full break-words">
+                </p>
+                <button onclick="carregarProdutos()"
+                    class="mt-6 px-4 py-2 bg-red-100 text-red-700 rounded hover:bg-red-200 transition-colors">Tentar
+                    Novamente</button>
+            </div>
         </div>
 
         <!-- Grelha de Produtos -->
@@ -85,18 +93,29 @@
         // Atualizar ano do rodapé
         document.getElementById('ano-atual').textContent = new Date().getFullYear();
 
-        // 1. Configurar o Cliente Supabase
-        const supabaseUrl = 'https://bqjqwuphjvbmxjfcezos.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxanF3dXBoanZibXhqZmNlem9zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwMTI1NjQsImV4cCI6MjA4OTU4ODU2NH0.manlyhsYXxUTK-llwa174wmhQ0HSVtuHTK387jiEMNk';
-        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
-
         // 2. Função para carregar os produtos
         async function carregarProdutos() {
             const loadingEl = document.getElementById('loading');
             const errorEl = document.getElementById('error-message');
             const grelhaEl = document.getElementById('grelha-produtos');
 
+            // Preparar o ecrã para nova tentativa
+            errorEl.classList.add('hidden');
+            loadingEl.classList.remove('hidden');
+            grelhaEl.classList.add('hidden');
+            grelhaEl.innerHTML = '';
+
             try {
+                // Verificar se o script do Supabase foi bloqueado
+                if (typeof window.supabase === 'undefined') {
+                    throw new Error("A biblioteca do Supabase não carregou. Desative o seu AdBlocker ou verifique a sua ligação.");
+                }
+
+                // 1. Configurar o Cliente Supabase
+                const supabaseUrl = 'https://bqjqwuphjvbmxjfcezos.supabase.co';
+                const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxanF3dXBoanZibXhqZmNlem9zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwMTI1NjQsImV4cCI6MjA4OTU4ODU2NH0.manlyhsYXxUTK-llwa174wmhQ0HSVtuHTK387jiEMNk';
+                const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
                 // Vai buscar os dados à tabela 'produtos' no Supabase
                 const { data: produtos, error } = await supabase
                     .from('produtos')
@@ -153,9 +172,10 @@
                 }
 
             } catch (error) {
-                console.error('Erro ao buscar produtos:', error.message);
+                console.error('Erro ao buscar produtos:', error);
                 loadingEl.classList.add('hidden');
                 errorEl.classList.remove('hidden');
+                document.getElementById('error-details').textContent = 'Motivo: ' + (error.message || JSON.stringify(error));
             }
         }
 
