@@ -84,58 +84,148 @@
     </main>
 
     <!-- Rodapé -->
-    <footer class="w-full py-6 text-center text-sm text-gray-500 mt-auto">
-        <p>&copy; <span id="ano-atual"></span> Eva Leite Atelier. Todos os direitos reservados.</p>
+    <footer class="w-full py-6 text-center text-sm text-gray-500 mt-auto relative">
+        <p>&copy; <span id="ano-atual"></span> Eva Leite Atelier. <span id="btn-admin" class="cursor-pointer" onclick="abrirModalSenha()">Todos</span> os direitos reservados.</p>
     </footer>
+
+    <!-- ========================================= -->
+    <!-- MODAIS DE ADMINISTRAÇÃO -->
+    <!-- ========================================= -->
+    
+    <!-- Modal de Senha -->
+    <div id="modal-senha" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg p-6 w-full max-w-sm">
+            <h3 class="text-xl font-semibold mb-4 text-gray-900">Acesso Reservado</h3>
+            <p class="text-sm text-gray-500 mb-4">Insira a palavra-passe para aceder à administração.</p>
+            <input type="password" id="input-senha" class="w-full p-2 border rounded mb-4 focus:ring-marca focus:border-marca outline-none" placeholder="Palavra-passe">
+            <div class="flex justify-end gap-2">
+                <button onclick="fecharModal('modal-senha')" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded transition-colors">Cancelar</button>
+                <button onclick="verificarSenha()" class="px-4 py-2 bg-marca text-white rounded hover:bg-gray-800 transition-colors">Entrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Escolha Admin -->
+    <div id="modal-admin-escolha" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg p-6 w-full max-w-sm text-center">
+            <h3 class="text-xl font-semibold mb-6 text-gray-900">Administração</h3>
+            <div class="flex flex-col gap-3">
+                <button onclick="abrirModal('modal-adicionar'); fecharModal('modal-admin-escolha')" class="px-4 py-3 bg-marca text-white rounded hover:bg-gray-800 transition-colors">Adicionar Produto</button>
+                <button onclick="abrirModalExcluir()" class="px-4 py-3 border border-red-500 text-red-500 rounded hover:bg-red-50 transition-colors">Excluir Produto</button>
+                <button onclick="fecharModal('modal-admin-escolha')" class="mt-4 px-4 py-2 text-gray-600 hover:bg-gray-100 rounded transition-colors">Sair</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Adicionar Produto -->
+    <div id="modal-adicionar" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto">
+            <h3 class="text-xl font-semibold mb-4 text-gray-900">Novo Produto</h3>
+            <form id="form-produto" onsubmit="salvarProduto(event)" class="flex flex-col gap-4 text-left">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Nome do Produto *</label>
+                    <input type="text" id="add-nome" required class="w-full mt-1 p-2 border rounded text-gray-900 focus:ring-marca focus:border-marca outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Descrição</label>
+                    <textarea id="add-desc" rows="3" class="w-full mt-1 p-2 border rounded text-gray-900 focus:ring-marca focus:border-marca outline-none"></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Preço (€) *</label>
+                    <input type="number" id="add-preco" step="0.01" required class="w-full mt-1 p-2 border rounded text-gray-900 focus:ring-marca focus:border-marca outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Link da Vinted *</label>
+                    <input type="url" id="add-vinted" required class="w-full mt-1 p-2 border rounded text-gray-900 focus:ring-marca focus:border-marca outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Imagem (Ficheiro) *</label>
+                    <input type="file" id="add-imagem" accept="image/*" required class="w-full mt-1 p-2 border rounded text-gray-800">
+                    <p class="text-xs text-gray-500 mt-1">A imagem será publicamente acessível na loja.</p>
+                </div>
+                
+                <div id="add-loading" class="hidden text-center text-sm text-blue-600 my-2">A guardar no sistema... Pode demorar alguns segundos.</div>
+                <div id="add-error" class="hidden text-center text-sm text-red-600 my-2 bg-red-50 p-2 rounded"></div>
+                
+                <div class="flex justify-end gap-2 mt-4 pt-4 border-t">
+                    <button type="button" onclick="fecharModal('modal-adicionar')" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded transition-colors">Cancelar</button>
+                    <button type="submit" id="btn-guardar-produto" class="px-4 py-2 bg-marca text-white rounded hover:bg-gray-800 transition-colors">Publicar Produto</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Excluir Produto -->
+    <div id="modal-excluir" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] flex flex-col">
+            <h3 class="text-xl font-semibold mb-4 text-gray-900">Excluir Produtos</h3>
+            
+            <div id="lista-excluir-loading" class="flex justify-center my-4 hidden">
+                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-marca"></div>
+            </div>
+            
+            <div id="lista-excluir" class="flex-grow overflow-y-auto mb-4 border rounded p-2 flex flex-col gap-2 relative max-h-80 bg-gray-50">
+                <!-- Lista injetada via JS -->
+            </div>
+            
+            <div id="del-loading" class="hidden text-center text-sm text-red-600 my-2">A apagar...</div>
+            <div id="del-error" class="hidden text-center text-sm text-red-600 my-2 bg-red-50 p-2 rounded"></div>
+
+            <div class="flex justify-between items-center mt-auto pt-4 border-t">
+                <span class="text-sm text-gray-500"><span id="count-selecionados" class="font-bold text-marca">0</span> selecionado(s)</span>
+                <div class="flex gap-2">
+                    <button onclick="fecharModal('modal-excluir')" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded transition-colors">Cancelar</button>
+                    <button onclick="apagarSelecionados()" id="btn-apagar" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors" disabled>Apagar Selecionados</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Lógica JavaScript / Supabase -->
     <script>
+        // Configuração Global Supabase
+        const supabaseUrl = 'https://bqjqwuphjvbmxjfcezos.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxanF3dXBoanZibXhqZmNlem9zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwMTI1NjQsImV4cCI6MjA4OTU4ODU2NH0.manlyhsYXxUTK-llwa174wmhQ0HSVtuHTK387jiEMNk';
+        
+        let supabaseClient = null;
+        if (typeof window.supabase !== 'undefined') {
+            supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+        }
+
         // Atualizar ano do rodapé
         document.getElementById('ano-atual').textContent = new Date().getFullYear();
 
-        // 2. Função para carregar os produtos
+        // =========================================
+        // 1. CARREGAR PRODUTOS (LOJA PRINCIPAL)
+        // =========================================
         async function carregarProdutos() {
             const loadingEl = document.getElementById('loading');
             const errorEl = document.getElementById('error-message');
             const grelhaEl = document.getElementById('grelha-produtos');
 
-            // Preparar o ecrã para nova tentativa
             errorEl.classList.add('hidden');
             loadingEl.classList.remove('hidden');
             grelhaEl.classList.add('hidden');
             grelhaEl.innerHTML = '';
 
             try {
-                // Verificar se o script do Supabase foi bloqueado
-                if (typeof window.supabase === 'undefined') {
-                    throw new Error("A biblioteca do Supabase não carregou. Desative o seu AdBlocker ou verifique a sua ligação.");
-                }
+                if (!supabaseClient) throw new Error("A biblioteca do Supabase não carregou. Verifique a sua ligação.");
 
-                // 1. Configurar o Cliente Supabase
-                const supabaseUrl = 'https://bqjqwuphjvbmxjfcezos.supabase.co';
-                const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxanF3dXBoanZibXhqZmNlem9zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwMTI1NjQsImV4cCI6MjA4OTU4ODU2NH0.manlyhsYXxUTK-llwa174wmhQ0HSVtuHTK387jiEMNk';
-                const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
-
-                // Vai buscar os dados à tabela 'produtos' no Supabase
-                const { data: produtos, error } = await supabase
+                const { data: produtos, error } = await supabaseClient
                     .from('produtos')
                     .select('*')
-                    .order('created_at', { ascending: false }); // Mostra os mais recentes primeiro
+                    .order('created_at', { ascending: false });
 
                 if (error) throw error;
 
-                // Esconde o loading
                 loadingEl.classList.add('hidden');
 
                 if (produtos && produtos.length > 0) {
                     grelhaEl.classList.remove('hidden');
 
-                    // Constrói o HTML para cada produto
                     produtos.forEach(produto => {
-                        // Formatação do preço (ex: 15.00 -> 15,00 €)
                         const precoFormatado = produto.preco ?
-                            new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(produto.preco) :
-                            '';
+                            new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(produto.preco) : '';
 
                         const cardHTML = `
                             <div class="produto-card bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col h-full border border-gray-100">
@@ -161,7 +251,6 @@
                         grelhaEl.innerHTML += cardHTML;
                     });
                 } else {
-                    // Se não houver produtos na base de dados
                     grelhaEl.classList.remove('hidden');
                     grelhaEl.innerHTML = `
                         <div class="col-span-full text-center py-10 text-gray-500">
@@ -170,7 +259,6 @@
                     `;
                     grelhaEl.classList.remove('grid', 'grid-cols-1', 'sm:grid-cols-2', 'md:grid-cols-3', 'lg:grid-cols-4');
                 }
-
             } catch (error) {
                 console.error('Erro ao buscar produtos:', error);
                 loadingEl.classList.add('hidden');
@@ -179,9 +267,203 @@
             }
         }
 
-        // Executar a função quando a página carregar
         document.addEventListener('DOMContentLoaded', carregarProdutos);
+
+        // =========================================
+        // 2. ADMINISTRAÇÃO DOS PRODUTOS
+        // =========================================
+        const SENHA_ADMIN = "evaadmin"; // Palavra-passe da administração
+        
+        function abrirModal(id) { document.getElementById(id).classList.remove('hidden'); }
+        function fecharModal(id) { document.getElementById(id).classList.add('hidden'); }
+
+        function abrirModalSenha() {
+            document.getElementById('input-senha').value = '';
+            abrirModal('modal-senha');
+            setTimeout(() => document.getElementById('input-senha').focus(), 100);
+        }
+
+        function verificarSenha() {
+            const input = document.getElementById('input-senha').value;
+            if (input === SENHA_ADMIN) {
+                fecharModal('modal-senha');
+                abrirModal('modal-admin-escolha');
+            } else {
+                alert('Palavra-passe incorreta!');
+            }
+        }
+
+        // Permitir usar Enter para a password
+        document.getElementById('input-senha').addEventListener('keypress', function(e) {
+            if(e.key === 'Enter') verificarSenha();
+        });
+
+        async function salvarProduto(event) {
+            event.preventDefault();
+            const btn = document.getElementById('btn-guardar-produto');
+            const loading = document.getElementById('add-loading');
+            const errorEl = document.getElementById('add-error');
+            
+            btn.disabled = true;
+            loading.classList.remove('hidden');
+            errorEl.classList.add('hidden');
+            
+            try {
+                const nome = document.getElementById('add-nome').value;
+                const desc = document.getElementById('add-desc').value;
+                const preco = parseFloat(document.getElementById('add-preco').value);
+                const vinted = document.getElementById('add-vinted').value;
+                const fileInput = document.getElementById('add-imagem');
+                const file = fileInput.files[0];
+                
+                if (!file) throw new Error("A imagem é obrigatória.");
+                
+                // 2.1 Upload da Imagem para o bucket 'produtos-imagens'
+                const fileExt = file.name.split('.').pop();
+                const fileName = `produto_${Date.now()}.${fileExt}`;
+                
+                const { error: uploadError } = await supabaseClient.storage
+                    .from('produtos-imagens')
+                    .upload(fileName, file);
+                    
+                if (uploadError) throw new Error("Erro de Upload (certifique-se que o bucket público 'produtos-imagens' existe no supabase): " + uploadError.message);
+                
+                // 2.2 Obter URL Público
+                const { data: publicUrlData } = supabaseClient.storage
+                    .from('produtos-imagens')
+                    .getPublicUrl(fileName);
+                    
+                const imagemUrl = publicUrlData.publicUrl;
+                
+                // 2.3 Gravar Produto na Base de Dados
+                const { error: insertError } = await supabaseClient
+                    .from('produtos')
+                    .insert([{
+                        nome: nome,
+                        descricao: desc,
+                        preco: preco,
+                        vinted_url: vinted,
+                        imagem_url: imagemUrl
+                    }]);
+                    
+                if (insertError) throw new Error("Erro na Base de Dados: " + insertError.message);
+                
+                alert('Produto guardado e publicado com sucesso!');
+                fecharModal('modal-adicionar');
+                document.getElementById('form-produto').reset();
+                carregarProdutos();
+                
+            } catch (err) {
+                errorEl.textContent = err.message;
+                errorEl.classList.remove('hidden');
+            } finally {
+                btn.disabled = false;
+                loading.classList.add('hidden');
+            }
+        }
+
+        let produtosParaExcluir = [];
+
+        async function abrirModalExcluir() {
+            fecharModal('modal-admin-escolha');
+            abrirModal('modal-excluir');
+            atualizarBotaoApagar();
+            
+            const listaEl = document.getElementById('lista-excluir');
+            const loading = document.getElementById('lista-excluir-loading');
+            
+            listaEl.innerHTML = '';
+            loading.classList.remove('hidden');
+            produtosParaExcluir = [];
+            
+            try {
+                const { data: produtos, error } = await supabaseClient
+                    .from('produtos')
+                    .select('id, nome, preco, imagem_url')
+                    .order('created_at', { ascending: false });
+                    
+                if (error) throw error;
+                
+                if (produtos.length === 0) {
+                    listaEl.innerHTML = '<p class="text-center text-gray-500 py-8">Não existem produtos para apagar.</p>';
+                } else {
+                    produtos.forEach(p => {
+                        const div = document.createElement('div');
+                        div.className = 'flex items-center gap-4 p-3 bg-white border rounded shadow-sm hover:shadow-md transition-shadow cursor-pointer';
+                        // Clicar em toda a row permite selecionar
+                        div.onclick = (e) => {
+                            if(e.target.tagName !== 'INPUT') {
+                                const checkbox = div.querySelector('input');
+                                checkbox.checked = !checkbox.checked;
+                                toggleExcluir(checkbox);
+                            }
+                        };
+                        div.innerHTML = `
+                            <input type="checkbox" class="w-5 h-5 cursor-pointer rounded border-gray-300 mx-2 text-marca focus:ring-marca" value="${p.id}" onchange="toggleExcluir(this)">
+                            <img src="${p.imagem_url}" class="w-16 h-16 object-cover rounded shadow-sm bg-gray-100">
+                            <div class="flex-grow min-w-0">
+                                <p class="font-medium text-gray-900 truncate">${p.nome}</p>
+                                <p class="text-sm text-gray-500">${p.preco} €</p>
+                            </div>
+                        `;
+                        listaEl.appendChild(div);
+                    });
+                }
+            } catch (err) {
+                listaEl.innerHTML = `<p class="text-red-500 p-2 text-center text-sm">Erro ao buscar: ${err.message}</p>`;
+            } finally {
+                loading.classList.add('hidden');
+            }
+        }
+
+        function toggleExcluir(checkbox) {
+            const id = checkbox.value; // Pode ser UUID ou Integer, depende da base de dados
+            if (checkbox.checked) {
+                if(!produtosParaExcluir.includes(id)) produtosParaExcluir.push(id);
+            } else {
+                produtosParaExcluir = produtosParaExcluir.filter(pid => pid !== id);
+            }
+            atualizarBotaoApagar();
+        }
+
+        function atualizarBotaoApagar() {
+            document.getElementById('count-selecionados').textContent = produtosParaExcluir.length;
+            document.getElementById('btn-apagar').disabled = produtosParaExcluir.length === 0;
+        }
+
+        async function apagarSelecionados() {
+            if (produtosParaExcluir.length === 0) return;
+            if (!confirm(`Têm a certeza absoluta que quer apagar ${produtosParaExcluir.length} produto(s)? Esta ação não pode ser desfeita.`)) return;
+            
+            const btn = document.getElementById('btn-apagar');
+            const loading = document.getElementById('del-loading');
+            const errorEl = document.getElementById('del-error');
+            
+            btn.disabled = true;
+            loading.classList.remove('hidden');
+            errorEl.classList.add('hidden');
+            
+            try {
+                // Delete API Request - Só da tabela produtos
+                const { error } = await supabaseClient
+                    .from('produtos')
+                    .delete()
+                    .in('id', produtosParaExcluir);
+                    
+                if (error) throw new Error("Erro na Base de Dados: " + error.message);
+                
+                alert('Produtos apagados com sucesso!');
+                fecharModal('modal-excluir');
+                carregarProdutos();
+                
+            } catch (err) {
+                errorEl.textContent = err.message;
+                errorEl.classList.remove('hidden');
+                btn.disabled = false;
+            } finally {
+                loading.classList.add('hidden');
+            }
+        }
     </script>
 </body>
-
 </html>
