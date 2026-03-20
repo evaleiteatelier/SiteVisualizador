@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="pt-PT">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eva Leite Atelier</title>
-    
+
     <!-- Tailwind CSS para o design e responsividade -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -31,24 +32,27 @@
         .produto-card:hover img {
             transform: scale(1.05);
         }
+
         .produto-card img {
             transition: transform 0.3s ease;
         }
     </style>
 </head>
+
 <body class="bg-fundo text-marca min-h-screen flex flex-col">
 
     <!-- Cabeçalho com a Logo -->
-    <header class="w-full py-8 flex justify-center items-center shadow-sm bg-fundo/90 sticky top-0 z-50 backdrop-blur-sm">
+    <header
+        class="w-full py-8 flex justify-center items-center shadow-sm bg-fundo/90 sticky top-0 z-50 backdrop-blur-sm">
         <div class="text-center">
             <!-- Certifique-se de que a imagem está na mesma pasta que o index.html -->
-            <img src="IMG-20260306-WA0002.jpg" alt="Eva Leite Atelier Logo" class="h-24 md:h-32 object-contain mix-blend-multiply">
+            <img src="logo.png" alt="Eva Leite Atelier Logo" class="h-24 md:h-32 object-contain mix-blend-multiply">
         </div>
     </header>
 
     <!-- Conteúdo Principal -->
     <main class="flex-grow container mx-auto px-4 py-8 max-w-6xl">
-        
+
         <div class="mb-8 text-center">
             <h1 class="text-2xl font-light tracking-widest uppercase">A nossa coleção</h1>
             <p class="text-gray-500 mt-2">Clique no produto para comprar diretamente na Vinted.</p>
@@ -106,12 +110,12 @@
 
                 if (produtos && produtos.length > 0) {
                     grelhaEl.classList.remove('hidden');
-                    
+
                     // Constrói o HTML para cada produto
                     produtos.forEach(produto => {
                         // Formatação do preço (ex: 15.00 -> 15,00 €)
-                        const precoFormatado = produto.preco ? 
-                            new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(produto.preco) : 
+                        const precoFormatado = produto.preco ?
+                            new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(produto.preco) :
                             '';
 
                         const cardHTML = `
@@ -159,4 +163,5 @@
         document.addEventListener('DOMContentLoaded', carregarProdutos);
     </script>
 </body>
+
 </html>
