@@ -195,6 +195,23 @@
 
     container.innerHTML = html;
     if (totalEl) totalEl.textContent = AtelierLoja.formatarPreco(soma);
+    const favZapWrap = document.getElementById('drawer-fav-whatsapp-wrap');
+    if (favZapWrap) {
+      const produtosFav = ids.map(id => obterProdutoMemoria(id)).filter(Boolean);
+      if (AtelierLoja.isWhatsAppDisponivel() && produtosFav.length > 0) {
+        const waFavUrl = AtelierLoja.gerarLinkWhatsAppFavoritos(produtosFav);
+        favZapWrap.innerHTML = `
+          <a href="${AtelierLoja.escapeHtml(waFavUrl)}" target="_blank" rel="noopener noreferrer"
+            class="w-full py-3 px-4 rounded-xl bg-[#166534] hover:bg-[#14532d] text-white text-xs font-semibold uppercase tracking-wider flex items-center justify-center gap-2 transition-colors shadow-sm">
+            ${svgWhatsApp('w-4 h-4')}
+            <span>Enviar Favoritos por WhatsApp ↗</span>
+          </a>`;
+        favZapWrap.classList.remove('hidden');
+      } else {
+        favZapWrap.innerHTML = '';
+        favZapWrap.classList.add('hidden');
+      }
+    }
     if (resumoEl) resumoEl.classList.remove('hidden');
   }
 
@@ -265,9 +282,15 @@
 
   function atualizarEstadoCanaisShell() {
     const whatsappAtivo = AtelierLoja.isWhatsAppDisponivel();
+    const whatsappPendente = !whatsappAtivo && AtelierLoja.isWhatsAppConfiguradoPendente();
+    const cfgZap = AtelierLoja.obterConfigWhatsApp();
+    const info = AtelierLoja.obterInfoAtelier();
+
     const avisoTopo = whatsappAtivo
       ? 'Peças Únicas de Atelier &nbsp;•&nbsp; Finalize na Vinted ou diretamente por WhatsApp'
-      : 'Peças Únicas de Atelier &nbsp;•&nbsp; Compra Segura na Vinted &nbsp;•&nbsp; Atendimento por WhatsApp brevemente';
+      : whatsappPendente
+        ? 'Peças Únicas de Atelier &nbsp;•&nbsp; Compra Segura na Vinted &nbsp;•&nbsp; WhatsApp oficial em ativação'
+        : 'Peças Únicas de Atelier &nbsp;•&nbsp; Compra Segura na Vinted &nbsp;•&nbsp; Atendimento por WhatsApp brevemente';
 
     const ann = document.getElementById('loja-announcement-bar');
     if (ann) ann.innerHTML = avisoTopo;
@@ -276,8 +299,53 @@
     if (zapFooterEl) {
       zapFooterEl.innerHTML = whatsappAtivo
         ? '<span class="inline-flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800">Disponível</span>'
-        : '<span class="inline-flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-amber-100/80 text-amber-800">Indisponível de momento</span>';
+        : whatsappPendente
+          ? '<span class="inline-flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-sky-100 text-sky-800">A atualizar nº</span>'
+          : '<span class="inline-flex items-center gap-1.5 text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-amber-100/80 text-amber-800">Indisponível de momento</span>';
     }
+
+    const footerCtaEl = document.getElementById('footer-whatsapp-cta');
+    if (footerCtaEl) {
+      if (whatsappAtivo) {
+        const waGeral = AtelierLoja.gerarLinkWhatsAppGeral();
+        footerCtaEl.innerHTML = `
+          <a href="${AtelierLoja.escapeHtml(waGeral)}" target="_blank" rel="noopener noreferrer"
+            class="mt-2.5 w-full py-2.5 px-3.5 rounded-xl bg-[#166534] hover:bg-[#14532d] text-white text-xs font-semibold flex items-center justify-center gap-2 transition-colors">
+            ${svgWhatsApp('w-4 h-4')}
+            <span>${cfgZap.numeroFormatado ? AtelierLoja.escapeHtml(cfgZap.numeroFormatado) : 'Falar por WhatsApp'} ↗</span>
+          </a>`;
+        footerCtaEl.classList.remove('hidden');
+      } else {
+        footerCtaEl.innerHTML = '';
+        footerCtaEl.classList.add('hidden');
+      }
+    }
+
+    const metaEl = document.getElementById('footer-atelier-contact-meta');
+    if (metaEl && info) {
+      const linhas = [];
+      if (info.email) {
+        linhas.push(`<a href="mailto:${AtelierLoja.escapeHtml(info.email)}" class="hover:text-stone-950 transition-colors block truncate">${AtelierLoja.escapeHtml(info.email)}</a>`);
+      }
+      if (info.moradaCompleta) {
+        linhas.push(`<a href="contactos.html#localizacao" class="hover:text-stone-950 transition-colors block">${AtelierLoja.escapeHtml(info.moradaCompleta)}</a>`);
+      } else if (info.localidade) {
+        linhas.push(`<a href="contactos.html#localizacao" class="hover:text-stone-950 transition-colors block">${AtelierLoja.escapeHtml(info.localidade)} • Atendimento presencial no atelier</a>`);
+      }
+      metaEl.innerHTML = linhas.join('');
+    }
+
+    const floatBtn = document.getElementById('floating-whatsapp-btn');
+    if (floatBtn) {
+      if (whatsappAtivo) {
+        floatBtn.href = AtelierLoja.gerarLinkWhatsAppGeral();
+        floatBtn.classList.remove('hidden');
+      } else {
+        floatBtn.classList.add('hidden');
+      }
+    }
+
+    renderListaFavoritos();
   }
 
   function atualizarCategoriasNavegacao() {
@@ -320,10 +388,11 @@
                   <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
                 </svg>
               </button>
-              <nav class="hidden md:flex items-center gap-6 text-xs font-medium tracking-[0.14em] uppercase text-stone-700">
+              <nav class="hidden md:flex items-center gap-4 lg:gap-5 text-[11px] lg:text-xs font-medium tracking-[0.12em] uppercase text-stone-700">
                 <a href="index.html#colecao" class="hover:text-[#b8933a] transition-colors whitespace-nowrap">Coleção</a>
-                <a href="index.html#como-comprar" class="hover:text-[#b8933a] transition-colors whitespace-nowrap">Como Comprar</a>
-                <a href="index.html#atelier" class="hover:text-[#b8933a] transition-colors whitespace-nowrap">O Atelier</a>
+                <a href="index.html#como-comprar" class="hidden lg:inline-block hover:text-[#b8933a] transition-colors whitespace-nowrap">Como Comprar</a>
+                <a href="contactos.html#localizacao" class="hover:text-[#b8933a] transition-colors whitespace-nowrap">Localização</a>
+                <a href="contactos.html" class="hover:text-[#b8933a] transition-colors whitespace-nowrap">Contactos</a>
               </nav>
             </div>
 
@@ -374,12 +443,13 @@
       const anoAtual = new Date().getFullYear();
       footerMount.innerHTML = `
         <footer class="bg-[#f3efe7] border-t border-stone-200/90 mt-auto text-stone-700">
-          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-14 grid grid-cols-1 md:grid-cols-3 gap-10">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
             <div>
               <img src="logo.png" alt="Eva Leite Atelier" class="h-11 object-contain mix-blend-multiply mb-4">
               <p class="text-sm text-stone-600 leading-relaxed max-w-sm">
                 Curadoria de moda autoral e peças exclusivas confecionadas com identidade, cor e acabamento artesanal.
               </p>
+              <div id="footer-atelier-contact-meta" class="mt-3 space-y-1 text-xs text-stone-600"></div>
               <a href="${AtelierLoja.CONFIG.instagramUrl}" target="_blank" rel="noopener noreferrer"
                 class="inline-flex items-center gap-2 mt-4 text-xs font-semibold tracking-wider uppercase text-stone-900 hover:text-[#b8933a] transition-colors">
                 ${svgInstagram('w-4 h-4')}
@@ -393,22 +463,49 @@
             </div>
 
             <div>
+              <h3 class="text-xs font-semibold tracking-[0.16em] uppercase text-stone-900 mb-4">Apoio &amp; Políticas</h3>
+              <ul class="space-y-2.5 text-sm text-stone-600">
+                <li><a href="contactos.html" class="hover:text-stone-950 transition-colors">Contactos</a></li>
+                <li><a href="contactos.html#localizacao" class="hover:text-stone-950 transition-colors">Localização do Atelier</a></li>
+                <li><a href="politica-envio.html" class="hover:text-stone-950 transition-colors">Política de Envio</a></li>
+                <li><a href="politica-entrega.html" class="hover:text-stone-950 transition-colors">Política de Entrega</a></li>
+                <li><a href="rgpd.html" class="hover:text-stone-950 transition-colors">RGPD &amp; Privacidade</a></li>
+                <li><a href="cookies.html" class="hover:text-stone-950 transition-colors">Política de Cookies</a></li>
+              </ul>
+            </div>
+
+            <div>
               <h3 class="text-xs font-semibold tracking-[0.16em] uppercase text-stone-900 mb-4">Canais de Compra</h3>
               <div class="space-y-3 text-sm">
                 <div class="flex items-center justify-between gap-2 p-3 rounded-xl bg-white/80 border border-stone-200/80">
                   <span class="font-medium text-stone-800">Compra pela Vinted</span>
                   <span class="inline-flex items-center text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800">Ativo</span>
                 </div>
-                <div class="flex items-center justify-between gap-2 p-3 rounded-xl bg-white/80 border border-stone-200/80">
-                  <span class="font-medium text-stone-800">Atendimento WhatsApp</span>
-                  <span id="footer-status-whatsapp"></span>
+                <div class="p-3 rounded-xl bg-white/80 border border-stone-200/80">
+                  <div class="flex items-center justify-between gap-2">
+                    <span class="font-medium text-stone-800">Atendimento WhatsApp</span>
+                    <span id="footer-status-whatsapp"></span>
+                  </div>
+                  <div id="footer-whatsapp-cta" class="hidden"></div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="border-t border-stone-200/80 py-5 px-4 text-center text-xs text-stone-500">
-            <p>&copy; <span id="ano-atual">${anoAtual}</span> Eva Leite Atelier. Todos os direitos reservados.</p>
+          <div class="border-t border-stone-200/80 py-5 px-4 text-xs text-stone-500">
+            <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+              <p>&copy; <span id="ano-atual">${anoAtual}</span> Eva Leite Atelier. Todos os direitos reservados.</p>
+              <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5">
+                <a href="contactos.html" class="hover:text-stone-900 transition-colors">Contactos</a>
+                <a href="politica-envio.html" class="hover:text-stone-900 transition-colors">Envio</a>
+                <a href="politica-entrega.html" class="hover:text-stone-900 transition-colors">Entrega</a>
+                <a href="rgpd.html" class="hover:text-stone-900 transition-colors">RGPD</a>
+                <a href="cookies.html" class="hover:text-stone-900 transition-colors">Cookies</a>
+                <button type="button" onclick="AtelierUI.abrirPreferenciasCookies()" class="underline underline-offset-4 hover:text-stone-900 transition-colors">
+                  Preferências de Cookies
+                </button>
+              </div>
+            </div>
           </div>
         </footer>`;
     }
@@ -425,13 +522,20 @@
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"></path></svg>
               </button>
             </div>
-            <div class="py-6 flex flex-col gap-3 text-sm font-medium text-stone-800">
+            <div class="py-6 flex flex-col gap-2.5 text-sm font-medium text-stone-800 overflow-y-auto">
               <span class="text-[11px] uppercase tracking-[0.16em] text-stone-400">Catálogo</span>
               <div id="mobile-nav-categorias" class="flex flex-col gap-1.5"></div>
               <hr class="my-2 border-stone-200">
               <a href="index.html#como-comprar" onclick="AtelierUI.fecharMenuMobile()" class="py-1.5 hover:text-[#b8933a]">Como Comprar</a>
-              <a href="index.html#atelier" onclick="AtelierUI.fecharMenuMobile()" class="py-1.5 hover:text-[#b8933a]">Sobre o Atelier</a>
+              <a href="contactos.html" onclick="AtelierUI.fecharMenuMobile()" class="py-1.5 hover:text-[#b8933a]">Contactos</a>
+              <a href="contactos.html#localizacao" onclick="AtelierUI.fecharMenuMobile()" class="py-1.5 hover:text-[#b8933a]">Localização</a>
               <button type="button" onclick="AtelierUI.fecharMenuMobile(); AtelierUI.abrirDrawerFavoritos()" class="text-left py-1.5 hover:text-[#b8933a]">Os Meus Favoritos</button>
+              <hr class="my-2 border-stone-200">
+              <span class="text-[11px] uppercase tracking-[0.16em] text-stone-400">Políticas &amp; RGPD</span>
+              <a href="politica-envio.html" onclick="AtelierUI.fecharMenuMobile()" class="py-1 text-xs text-stone-600 hover:text-[#b8933a]">Política de Envio</a>
+              <a href="politica-entrega.html" onclick="AtelierUI.fecharMenuMobile()" class="py-1 text-xs text-stone-600 hover:text-[#b8933a]">Política de Entrega</a>
+              <a href="rgpd.html" onclick="AtelierUI.fecharMenuMobile()" class="py-1 text-xs text-stone-600 hover:text-[#b8933a]">RGPD &amp; Privacidade</a>
+              <a href="cookies.html" onclick="AtelierUI.fecharMenuMobile()" class="py-1 text-xs text-stone-600 hover:text-[#b8933a]">Política de Cookies</a>
             </div>
             <div class="mt-auto pt-4 border-t border-stone-200">
               <a href="${AtelierLoja.CONFIG.instagramUrl}" target="_blank" rel="noopener noreferrer"
@@ -463,9 +567,90 @@
                 <span class="text-stone-600">Valor total estimado</span>
                 <span id="drawer-fav-total" class="text-lg font-semibold text-stone-900">0,00 €</span>
               </div>
+              <div id="drawer-fav-whatsapp-wrap" class="hidden"></div>
               <p class="text-xs text-stone-500">Abra cada peça para escolher entre finalizar pela Vinted ou pelo WhatsApp.</p>
             </div>
           </aside>
+        </div>
+
+        <a id="floating-whatsapp-btn" href="#" target="_blank" rel="noopener noreferrer" aria-label="Conversar no WhatsApp com o Eva Leite Atelier" title="Falar por WhatsApp"
+          class="hidden fixed bottom-20 lg:bottom-6 right-5 z-40 inline-flex items-center gap-2.5 px-4 py-3 rounded-full bg-[#166534] hover:bg-[#14532d] text-white text-xs font-semibold shadow-xl shadow-stone-900/20 transition-all hover:scale-105">
+          ${svgWhatsApp('w-5 h-5 shrink-0')}
+          <span class="hidden sm:inline">WhatsApp Atelier</span>
+        </a>
+
+        <div id="cookie-consent-banner" role="dialog" aria-label="Aviso de Cookies"
+          class="hidden fixed bottom-4 left-4 right-4 sm:left-6 sm:right-auto sm:max-w-md z-[65] bg-white border border-stone-200/90 rounded-2xl shadow-2xl p-4 sm:p-5">
+          <div class="space-y-3">
+            <div class="flex items-start justify-between gap-2">
+              <p class="text-xs font-semibold uppercase tracking-[0.14em] text-stone-900">Cookies &amp; Privacidade</p>
+              <a href="cookies.html" class="text-[11px] font-medium text-[#8d6d22] hover:underline shrink-0">Política de Cookies</a>
+            </div>
+            <p class="text-xs text-stone-600 leading-relaxed">
+              Este site utiliza apenas armazenamento local essencial para guardar os seus favoritos e as preferências técnicas em conformidade com o <a href="rgpd.html" class="underline hover:text-stone-900">RGPD</a>.
+            </p>
+            <div class="flex flex-wrap items-center gap-2 pt-0.5">
+              <button type="button" onclick="AtelierUI.aceitarTodosCookies()"
+                class="px-4 py-2 rounded-full bg-[#171614] hover:bg-stone-800 text-white text-[11px] font-semibold uppercase tracking-wider transition-colors">
+                Aceitar Todos
+              </button>
+              <button type="button" onclick="AtelierUI.recusarCookiesNaoEssenciais()"
+                class="px-3.5 py-2 rounded-full border border-stone-300 bg-white hover:border-stone-900 text-stone-800 text-[11px] font-semibold transition-colors">
+                Apenas Essenciais
+              </button>
+              <button type="button" onclick="AtelierUI.abrirPreferenciasCookies()"
+                class="px-2.5 py-2 text-[11px] font-medium text-stone-500 hover:text-stone-900 underline underline-offset-4">
+                Configurar
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div id="modal-preferencias-cookies" onclick="if (event.target === this) AtelierUI.fecharPreferenciasCookies()" role="dialog" aria-modal="true" aria-label="Preferências de Cookies"
+          class="hidden fixed inset-0 z-[75] flex items-center justify-center p-4 bg-black/50 backdrop-blur-[2px]">
+          <div class="bg-white rounded-2xl border border-stone-200 max-w-lg w-full p-6 shadow-2xl space-y-4">
+            <div class="flex items-center justify-between gap-3">
+              <div>
+                <h2 class="text-lg font-semibold text-stone-900">Preferências de Cookies</h2>
+                <p class="text-xs text-stone-500 mt-0.5">Gerir consentimento de armazenamento nos termos do RGPD</p>
+              </div>
+              <button type="button" onclick="AtelierUI.fecharPreferenciasCookies()" aria-label="Fechar janela de cookies" class="p-2 rounded-full text-stone-400 hover:bg-stone-100 hover:text-stone-900">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"></path></svg>
+              </button>
+            </div>
+
+            <div class="space-y-3">
+              <div class="p-3.5 rounded-xl border border-stone-200 bg-[#faf8f4] flex items-start justify-between gap-3">
+                <div>
+                  <p class="text-sm font-semibold text-stone-900">Cookies &amp; Armazenamento Estritamente Necessários</p>
+                  <p class="text-xs text-stone-600 mt-0.5 leading-relaxed">Necessários para os seus Favoritos e para memorizar esta escolha de privacidade.</p>
+                </div>
+                <span class="shrink-0 px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-semibold uppercase tracking-wider">Sempre Ativo</span>
+              </div>
+
+              <label class="p-3.5 rounded-xl border border-stone-200 bg-white flex items-start justify-between gap-3 cursor-pointer">
+                <div>
+                  <p class="text-sm font-semibold text-stone-900">Preferências &amp; Serviços Funcionais</p>
+                  <p class="text-xs text-stone-600 mt-0.5 leading-relaxed">Permite memorizar preferências adicionais de visualização e recursos externos integrados.</p>
+                </div>
+                <input type="checkbox" id="cookie-pref-checkbox" class="mt-1 h-4 w-4 accent-[#171614] cursor-pointer">
+              </label>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-stone-200">
+              <a href="cookies.html" class="text-xs font-medium text-stone-600 hover:text-stone-950 underline underline-offset-4">Ler Política de Cookies</a>
+              <div class="flex items-center gap-2">
+                <button type="button" onclick="AtelierUI.guardarPreferenciasCookies()"
+                  class="px-4 py-2 rounded-full border border-stone-300 bg-white hover:border-stone-900 text-stone-800 text-xs font-semibold">
+                  Guardar Escolha
+                </button>
+                <button type="button" onclick="AtelierUI.aceitarTodosCookies()"
+                  class="px-4 py-2 rounded-full bg-[#171614] hover:bg-stone-800 text-white text-xs font-semibold">
+                  Aceitar Todos
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div id="atelier-toast" role="status" aria-live="polite"
@@ -479,6 +664,55 @@
     atualizarCategoriasNavegacao();
     atualizarBadgeFavoritos();
     renderListaFavoritos();
+    atualizarBannerCookies();
+  }
+
+  function atualizarBannerCookies() {
+    const consent = AtelierLoja.getConsentimentoCookies();
+    const banner = document.getElementById('cookie-consent-banner');
+    if (banner) {
+      banner.classList.toggle('hidden', consent.decidido);
+    }
+    const cb = document.getElementById('cookie-pref-checkbox');
+    if (cb) cb.checked = Boolean(consent.preferencias);
+  }
+
+  function abrirPreferenciasCookies() {
+    const consent = AtelierLoja.getConsentimentoCookies();
+    const cb = document.getElementById('cookie-pref-checkbox');
+    if (cb) cb.checked = consent.decidido ? Boolean(consent.preferencias) : true;
+    const modal = document.getElementById('modal-preferencias-cookies');
+    if (modal) modal.classList.remove('hidden');
+  }
+
+  function fecharPreferenciasCookies() {
+    const modal = document.getElementById('modal-preferencias-cookies');
+    if (modal) modal.classList.add('hidden');
+  }
+
+  function aceitarTodosCookies() {
+    AtelierLoja.salvarConsentimentoCookies(true);
+    atualizarBannerCookies();
+    fecharPreferenciasCookies();
+    global.dispatchEvent(new CustomEvent('atelier:cookies-atualizados'));
+    mostrarToast('Preferências de cookies guardadas.');
+  }
+
+  function recusarCookiesNaoEssenciais() {
+    AtelierLoja.salvarConsentimentoCookies(false);
+    atualizarBannerCookies();
+    fecharPreferenciasCookies();
+    global.dispatchEvent(new CustomEvent('atelier:cookies-atualizados'));
+    mostrarToast('Apenas cookies essenciais ativos.');
+  }
+
+  function guardarPreferenciasCookies() {
+    const cb = document.getElementById('cookie-pref-checkbox');
+    AtelierLoja.salvarConsentimentoCookies(cb ? cb.checked : false);
+    atualizarBannerCookies();
+    fecharPreferenciasCookies();
+    global.dispatchEvent(new CustomEvent('atelier:cookies-atualizados'));
+    mostrarToast('Preferências de cookies guardadas.');
   }
 
   function renderCardProduto(produto, idx, opcoes = {}) {
@@ -512,7 +746,7 @@
         ${temVinted ? '<span class="px-2 py-0.5 rounded-full bg-stone-100 text-stone-700 text-[10px] font-medium border border-stone-200/80">Vinted</span>' : ''}
         ${temZap
           ? '<span class="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-medium border border-emerald-200/80">WhatsApp</span>'
-          : '<span class="px-2 py-0.5 rounded-full bg-stone-50 text-stone-400 text-[10px] border border-stone-200/60" title="Atendimento por WhatsApp disponível brevemente">WhatsApp brevemente</span>'
+          : '<span class="px-2 py-0.5 rounded-full bg-stone-50 text-stone-400 text-[10px] border border-stone-200/60" title="Atendimento por WhatsApp brevemente disponível">WhatsApp brevemente</span>'
         }
       </div>`;
 
@@ -559,10 +793,31 @@
       </article>`;
   }
 
+  async function inicializarPaginaInstitucional(aoCarregarEstado) {
+    montarShell({ pagina: 'institucional' });
+    if (typeof aoCarregarEstado === 'function') {
+      try {
+        aoCarregarEstado(null);
+      } catch (_) {}
+    }
+    try {
+      const estado = await AtelierLoja.carregarEstadoLoja();
+      registrarProdutos(estado.produtosVisiveis);
+      atualizarEstadoCanaisShell();
+      atualizarCategoriasNavegacao();
+      if (typeof aoCarregarEstado === 'function') {
+        aoCarregarEstado(estado);
+      }
+    } catch (err) {
+      console.error('Erro ao sincronizar configurações da loja:', err);
+    }
+  }
+
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
       fecharMenuMobile();
       fecharDrawerFavoritos();
+      fecharPreferenciasCookies();
     }
   });
 
@@ -588,6 +843,13 @@
     togglePesquisaHeader,
     submeterPesquisaHeader,
     aoClicarCategoriaHeader,
-    renderCardProduto
+    renderCardProduto,
+    atualizarBannerCookies,
+    abrirPreferenciasCookies,
+    fecharPreferenciasCookies,
+    aceitarTodosCookies,
+    recusarCookiesNaoEssenciais,
+    guardarPreferenciasCookies,
+    inicializarPaginaInstitucional
   };
 })(window);

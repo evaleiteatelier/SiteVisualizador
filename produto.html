@@ -186,12 +186,18 @@
 
           <details class="atelier-accordion py-3.5 group">
             <summary class="flex items-center justify-between cursor-pointer text-sm font-semibold text-stone-900">
-              <span>Envio &amp; Compra Protegida na Vinted</span>
+              <span>Envio, Entrega &amp; Compra Protegida</span>
               <svg class="w-4 h-4 text-stone-500 accordion-chevron" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/></svg>
             </summary>
-            <p class="text-xs sm:text-sm text-stone-600 leading-relaxed pt-2.5">
-              Ao optar pela Vinted, beneficia da proteção oficial ao comprador, várias opções de ponto de entrega e código de seguimento atualizado até receber a encomenda.
-            </p>
+            <div class="text-xs sm:text-sm text-stone-600 leading-relaxed pt-2.5 space-y-2">
+              <p>
+                Ao optar pela Vinted, beneficia da proteção oficial ao comprador, pontos de recolha e seguimento atualizado. Em compras diretas por WhatsApp enviamos por CTT Registado / Expresso ou combinamos levantamento no atelier.
+              </p>
+              <div class="flex flex-wrap gap-3 text-xs font-semibold text-stone-800">
+                <a href="politica-envio.html" class="underline underline-offset-4 hover:text-[#b8933a]">Política de Envio →</a>
+                <a href="politica-entrega.html" class="underline underline-offset-4 hover:text-[#b8933a]">Política de Entrega →</a>
+              </div>
+            </div>
           </details>
 
           <details class="atelier-accordion py-3.5 group">
@@ -403,6 +409,8 @@
       }
 
       const zapAtivo = AtelierLoja.isWhatsAppDisponivel();
+      const zapPendente = !zapAtivo && AtelierLoja.isWhatsAppConfiguradoPendente();
+      const cfgZap = AtelierLoja.obterConfigWhatsApp();
       const urlZap = zapAtivo ? AtelierLoja.gerarLinkWhatsApp(produto) : '';
 
       if (zapAtivo && urlZap) {
@@ -413,7 +421,7 @@
               ${AtelierUI.svgWhatsApp('w-5 h-5 shrink-0')}
               <div>
                 <span class="block text-sm font-semibold tracking-wide">Finalizar por WhatsApp</span>
-                <span class="block text-[11px] text-emerald-100">Mensagem pré-definida com esta peça</span>
+                <span class="block text-[11px] text-emerald-100">${cfgZap.numeroFormatado ? `Atendimento direto • ${AtelierLoja.escapeHtml(cfgZap.numeroFormatado)}` : 'Mensagem pré-definida com esta peça'}</span>
               </div>
             </div>
             <span class="text-lg">↗</span>
@@ -422,6 +430,15 @@
           accordionZap.textContent = 'Ao selecionar "Finalizar por WhatsApp", abre uma conversa direta com o atelier já preenchida com o nome, valor e ligação desta peça.';
         }
       } else {
+        const badgeTexto = zapPendente ? 'Em ativação' : 'Indisponível de momento';
+        const badgeCls = zapPendente
+          ? 'bg-sky-100 text-sky-900 border-sky-200'
+          : 'bg-amber-100 text-amber-900 border-amber-200';
+        const btnTexto = zapPendente ? 'WhatsApp a atualizar número oficial' : 'WhatsApp indisponível de momento';
+        const msgExplicacao = zapPendente
+          ? 'O atendimento direto por WhatsApp já se encontra ativo no site e está apenas a aguardar a atualização do número oficial. Entretanto, conclua pela Vinted ou utilize os nossos <a href="contactos.html" class="underline font-medium text-stone-700 hover:text-[#b8933a]">Contactos</a>.'
+          : `Estamos a concluir a ativação do número oficial do atelier para vendas diretas por WhatsApp. Entretanto, conclua pela Vinted ou envie mensagem no <a href="${AtelierLoja.CONFIG.instagramUrl}" target="_blank" rel="noopener noreferrer" class="underline font-medium text-stone-700 hover:text-[#b8933a]">Instagram</a>.`;
+
         zapBox.innerHTML = `
           <div class="p-4 rounded-xl bg-stone-100/80 border border-stone-200/90 space-y-2.5">
             <div class="flex items-center justify-between gap-2">
@@ -429,21 +446,22 @@
                 <span class="text-stone-400">${AtelierUI.svgWhatsApp('w-4 h-4')}</span>
                 <span>Finalizar por WhatsApp</span>
               </div>
-              <span class="px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-900 border border-amber-200 text-[10px] font-semibold uppercase tracking-wider">
-                Indisponível de momento
+              <span class="px-2.5 py-0.5 rounded-full border ${badgeCls} text-[10px] font-semibold uppercase tracking-wider">
+                ${badgeTexto}
               </span>
             </div>
             <button type="button" disabled aria-disabled="true"
               class="w-full py-2.5 px-4 rounded-xl bg-stone-200/80 text-stone-500 text-xs font-semibold cursor-not-allowed">
-              WhatsApp indisponível de momento
+              ${btnTexto}
             </button>
             <p class="text-[11px] text-stone-500 leading-relaxed">
-              Estamos a concluir a ativação do número oficial do atelier para vendas diretas por WhatsApp. Entretanto, conclua pela Vinted ou envie mensagem no
-              <a href="${AtelierLoja.CONFIG.instagramUrl}" target="_blank" rel="noopener noreferrer" class="underline font-medium text-stone-700 hover:text-[#b8933a]">Instagram</a>.
+              ${msgExplicacao}
             </p>
           </div>`;
         if (accordionZap) {
-          accordionZap.textContent = 'O atendimento direto por WhatsApp está tecnicamente preparado no site e encontra-se temporariamente indisponível enquanto concluímos a ativação do número oficial.';
+          accordionZap.textContent = zapPendente
+            ? 'O sistema de finalização por WhatsApp já está ativo e preparado para abrir conversa com os dados da peça assim que o número oficial seja guardado no painel.'
+            : 'O atendimento direto por WhatsApp está tecnicamente preparado no site e encontra-se temporariamente indisponível enquanto concluímos a ativação do número oficial.';
         }
       }
 

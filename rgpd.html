@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RGPD &amp; Política de Privacidade — Eva Leite Atelier</title>
+  <meta name="description" content="Informação sobre proteção de dados pessoais ao abrigo do Regulamento Geral sobre a Proteção de Dados (RGPD) e Lei n.º 58/2019 no Eva Leite Atelier.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="loja.css">
+</head>
+
+<body>
+  <div id="loja-header-mount"></div>
+
+  <main class="flex-1">
+    <section class="border-b border-stone-200/80 bg-gradient-to-b from-[#f3efe7]/70 to-[#faf8f4]">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14">
+        <nav class="flex items-center gap-2 text-xs text-stone-500 mb-4" aria-label="Caminho">
+          <a href="index.html" class="hover:text-stone-900 transition-colors">Início</a>
+          <span>/</span>
+          <span class="text-stone-900 font-medium">RGPD &amp; Privacidade</span>
+        </nav>
+
+        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-stone-200/90 text-[11px] font-semibold uppercase tracking-[0.16em] text-stone-700 mb-3">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#b8933a]"></span>
+          <span>Regulamento (UE) 2016/679 &amp; Lei n.º 58/2019</span>
+        </span>
+        <h1 class="text-3xl sm:text-4xl font-semibold tracking-tight text-[#171614]">RGPD &amp; Política de Privacidade</h1>
+        <p class="text-sm sm:text-base text-stone-600 mt-2 leading-relaxed">
+          O Eva Leite Atelier respeita integralmente a sua privacidade e trata apenas os dados pessoais estritamente necessários ao atendimento e execução dos pedidos em Portugal e na União Europeia.
+        </p>
+      </div>
+    </section>
+
+    <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14 space-y-6">
+      <div class="bg-white rounded-2xl border border-stone-200/90 p-6 sm:p-8 shadow-sm space-y-3">
+        <h2 class="text-lg font-semibold text-stone-950">1. Responsável pelo Tratamento de Dados</h2>
+        <div class="text-sm text-stone-600 leading-relaxed space-y-1">
+          <p><strong>Entidade:</strong> <span id="rgpd-entidade">Eva Leite Atelier</span> <span id="rgpd-nif"></span></p>
+          <p><strong>Correio Eletrónico:</strong> <a id="rgpd-email" href="mailto:evaleiteatelier@gmail.com" class="underline text-stone-900 hover:text-[#b8933a]">evaleiteatelier@gmail.com</a></p>
+          <p><strong>Localização:</strong> <span id="rgpd-local">Praça de Mouzinho de Albuquerque 113, Loja 126 • 4100-359 Porto</span></p>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-stone-200/90 p-6 sm:p-8 shadow-sm space-y-3">
+        <h2 class="text-lg font-semibold text-stone-950">2. Dados Recolhidos e Finalidade</h2>
+        <p class="text-sm text-stone-600 leading-relaxed">
+          Este website funciona como vitrina pública e catálogo do atelier, sem exigir registo ou criação obrigatória de conta de utilizador. Apenas recolhemos e tratamos dados pessoais quando o visitante toma a iniciativa de nos contactar ou efetuar uma compra:
+        </p>
+        <ul class="list-disc pl-5 space-y-2 text-sm text-stone-600 leading-relaxed">
+          <li><strong>Atendimento por WhatsApp, Correio Eletrónico ou Formulário de Contacto:</strong> nome, contacto telefónico, e-mail, morada de entrega e eventuais dados fiscais (NIF) estritamente para responder a questões, orçamentar, faturar e expedir a encomenda.</li>
+          <li><strong>Compras através da Vinted:</strong> o tratamento de pagamento e etiqueta de envio decorre na plataforma Vinted, regido também pela respetiva Política de Privacidade da Vinted.</li>
+          <li><strong>Favoritos e Preferências no Dispositivo:</strong> guardados exclusivamente no navegador do visitante através de armazenamento local (`localStorage`), sem envio automático para servidores externos de marketing.</li>
+        </ul>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-stone-200/90 p-6 sm:p-8 shadow-sm space-y-3">
+        <h2 class="text-lg font-semibold text-stone-950">3. Fundamento de Licitude e Conservação</h2>
+        <p class="text-sm text-stone-600 leading-relaxed">
+          O tratamento assenta na execução de diligências pré-contratuais ou contrato de compra e venda a pedido do cliente (Art.º 6.º, n.º 1, al. b) do RGPD), no cumprimento de obrigações jurídicas e fiscais aplicáveis em Portugal (al. c)) e, quando aplicável, no consentimento do titular (al. a)). Os dados são conservados apenas durante o período necessário para a finalidade do pedido ou pelo prazo legal obrigatório em matéria fiscal.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-stone-200/90 p-6 sm:p-8 shadow-sm space-y-3">
+        <h2 class="text-lg font-semibold text-stone-950">4. Partilha de Dados com Terceiros</h2>
+        <p class="text-sm text-stone-600 leading-relaxed">
+          Os seus dados nunca são vendidos nem cedidos a terceiros para fins publicitários. Apenas poderão ser comunicados a empresas transportadoras (CTT ou parceiros equivalentes) na medida estritamente indispensável para entregar a encomenda, ou às autoridades competentes quando legalmente exigido.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-stone-200/90 p-6 sm:p-8 shadow-sm space-y-3">
+        <h2 class="text-lg font-semibold text-stone-950">5. Direitos do Titular dos Dados &amp; Autoridade de Controlo</h2>
+        <p class="text-sm text-stone-600 leading-relaxed">
+          Nos termos do RGPD, tem direito de <strong>acesso</strong>, <strong>retificação</strong>, <strong>apagamento</strong>, <strong>limitação do tratamento</strong>, <strong>portabilidade</strong> e <strong>oposição</strong>, bem como de retirar o consentimento a qualquer altura. Para exercer qualquer destes direitos, envie pedido para o nosso correio eletrónico oficial indicado acima ou através da página de <a href="contactos.html" class="underline font-medium text-stone-900 hover:text-[#b8933a]">Contactos</a>.
+        </p>
+        <p class="text-sm text-stone-600 leading-relaxed">
+          Caso considere que o tratamento dos seus dados viola a legislação aplicável, tem igualmente o direito de apresentar reclamação junto da autoridade de controlo nacional: <strong>CNPD — Comissão Nacional de Proteção de Dados</strong> (<a href="https://www.cnpd.pt" target="_blank" rel="noopener noreferrer" class="underline hover:text-stone-900">www.cnpd.pt</a>).
+        </p>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-between gap-4 pt-2">
+        <a href="cookies.html" class="px-5 py-2.5 rounded-full bg-[#171614] text-white text-xs font-semibold uppercase tracking-wider hover:bg-stone-800 transition-colors">
+          Consultar Política de Cookies →
+        </a>
+        <a href="contactos.html" class="text-xs font-semibold text-stone-700 hover:text-[#b8933a] underline underline-offset-4">
+          Contactar Responsável de Dados
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <div id="loja-footer-mount"></div>
+  <div id="loja-overlays-mount"></div>
+
+  <script src="loja-config.js"></script>
+  <script src="loja-ui.js"></script>
+  <script>
+    function atualizarDadosRgpd() {
+      const info = AtelierLoja.obterInfoAtelier();
+      const entEl = document.getElementById('rgpd-entidade');
+      const nifEl = document.getElementById('rgpd-nif');
+      const emailEl = document.getElementById('rgpd-email');
+      const localEl = document.getElementById('rgpd-local');
+
+      if (entEl) entEl.textContent = info.entidadeLegal || 'Eva Leite Atelier';
+      if (nifEl) nifEl.textContent = info.nif ? `(NIF: ${info.nif})` : '';
+      if (emailEl) {
+        const em = info.email || 'evaleiteatelier@gmail.com';
+        emailEl.textContent = em;
+        emailEl.href = `mailto:${em}`;
+      }
+      if (localEl) localEl.textContent = info.moradaCompleta || info.localidade || 'Portugal';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      AtelierUI.inicializarPaginaInstitucional(() => {
+        atualizarDadosRgpd();
+      });
+    });
+  </script>
+</body>
+
+</html>
+

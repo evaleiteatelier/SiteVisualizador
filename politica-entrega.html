@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Política de Entrega — Eva Leite Atelier</title>
+  <meta name="description" content="Prazos estimados de entrega em Portugal e União Europeia, levantamento presencial no atelier, receção e resolução de incidências no Eva Leite Atelier.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="loja.css">
+</head>
+
+<body>
+  <div id="loja-header-mount"></div>
+
+  <main class="flex-1">
+    <section class="border-b border-stone-200/80 bg-gradient-to-b from-[#f3efe7]/70 to-[#faf8f4]">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14">
+        <nav class="flex items-center gap-2 text-xs text-stone-500 mb-4" aria-label="Caminho">
+          <a href="index.html" class="hover:text-stone-900 transition-colors">Início</a>
+          <span>/</span>
+          <span class="text-stone-900 font-medium">Política de Entrega</span>
+        </nav>
+
+        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-stone-200/90 text-[11px] font-semibold uppercase tracking-[0.16em] text-stone-700 mb-3">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#b8933a]"></span>
+          <span>Receção &amp; Prazos</span>
+        </span>
+        <h1 class="text-3xl sm:text-4xl font-semibold tracking-tight text-[#171614]">Política de Entrega</h1>
+        <p class="text-sm sm:text-base text-stone-600 mt-2 leading-relaxed">
+          Condições de entrega ao domicílio, pontos de recolha, levantamento no atelier e verificação à chegada.
+        </p>
+      </div>
+    </section>
+
+    <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14 space-y-6">
+      <div class="bg-white rounded-2xl border border-stone-200/90 p-6 sm:p-8 shadow-sm space-y-3">
+        <h2 class="text-lg font-semibold text-stone-950">1. Prazos Estimados Após Expedição</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+          <div class="p-4 rounded-xl bg-[#faf8f4] border border-stone-200/80">
+            <p class="text-xs font-semibold uppercase tracking-wider text-[#b8933a]">Portugal Continental</p>
+            <p class="text-base font-semibold text-stone-900 mt-1">1 a 3 dias úteis</p>
+            <p class="text-xs text-stone-500 mt-1">CTT Expresso / Ponto de Recolha</p>
+          </div>
+          <div class="p-4 rounded-xl bg-[#faf8f4] border border-stone-200/80">
+            <p class="text-xs font-semibold uppercase tracking-wider text-[#b8933a]">Açores &amp; Madeira</p>
+            <p class="text-base font-semibold text-stone-900 mt-1">3 a 7 dias úteis</p>
+            <p class="text-xs text-stone-500 mt-1">Consoante transporte postal</p>
+          </div>
+          <div class="p-4 rounded-xl bg-[#faf8f4] border border-stone-200/80">
+            <p class="text-xs font-semibold uppercase tracking-wider text-[#b8933a]">União Europeia</p>
+            <p class="text-base font-semibold text-stone-900 mt-1">4 a 10 dias úteis</p>
+            <p class="text-xs text-stone-500 mt-1">Transportadora internacional</p>
+          </div>
+        </div>
+        <p class="text-xs text-stone-500 pt-1">
+          Nota: Os prazos são indicativos da transportadora e podem sofrer ligeiras variações em períodos sazonais ou de elevado tráfego postal.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-stone-200/90 p-6 sm:p-8 shadow-sm space-y-3">
+        <h2 class="text-lg font-semibold text-stone-950">2. Levantamento Presencial no Atelier</h2>
+        <p class="text-sm text-stone-600 leading-relaxed">
+          É possível experimentar ou levantar a sua peça diretamente no atelier (Praça de Mouzinho de Albuquerque 113, Loja 126 • 4100-359 Porto) durante o horário de atendimento (09h00 – 18h00), sem custos de porte e sem necessidade de marcação prévia. Consulte a secção <a href="contactos.html#localizacao" class="underline font-medium text-stone-900 hover:text-[#b8933a]">Localização</a> para aceder ao mapa.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-stone-200/90 p-6 sm:p-8 shadow-sm space-y-3">
+        <h2 class="text-lg font-semibold text-stone-950">3. Morada, Ausência &amp; Pontos de Recolha</h2>
+        <ul class="list-disc pl-5 space-y-2 text-sm text-stone-600 leading-relaxed">
+          <li>É essencial confirmar que a morada completa, o código postal e o número de telemóvel estão corretos ao efetuar o pedido.</li>
+          <li>Quando a entrega é efetuada num ponto de recolha ou cacifo (ex. InPost / DPD / Loja CTT), a transportadora envia notificação com o prazo limite para levantamento.</li>
+          <li>Caso uma encomenda seja devolvida ao remetente por erro de morada ou por não ter sido levantada dentro do prazo da transportadora, o novo envio fica sujeito ao pagamento de novos portes.</li>
+        </ul>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-stone-200/90 p-6 sm:p-8 shadow-sm space-y-3">
+        <h2 class="text-lg font-semibold text-stone-950">4. Verificação no Ato da Entrega e Danos no Transporte</h2>
+        <p class="text-sm text-stone-600 leading-relaxed">
+          Recomendamos que verifique o estado exterior da embalagem ao recebê-la. Se notar embalagem violada, danificada ou qualquer anomalia com o conteúdo:
+        </p>
+        <ul class="list-disc pl-5 space-y-2 text-sm text-stone-600 leading-relaxed">
+          <li>Caso tenha adquirido pela <strong>Vinted</strong>, reporte o problema na própria plataforma antes de confirmar que está tudo bem, seguindo as instruções de proteção ao comprador.</li>
+          <li>Caso tenha adquirido diretamente pelo <strong>WhatsApp</strong>, contacte-nos no prazo máximo de <strong>48 horas</strong> após a entrega através da página de <a href="contactos.html" class="underline font-medium text-stone-900 hover:text-[#b8933a]">Contactos</a>, anexando fotografias da embalagem e da peça para podermos agir junto da transportadora.</li>
+        </ul>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-between gap-4 pt-2">
+        <a href="politica-envio.html" class="px-5 py-2.5 rounded-full border border-stone-300 bg-white text-stone-800 text-xs font-semibold uppercase tracking-wider hover:border-stone-900 transition-colors">
+          ← Consultar Política de Envio
+        </a>
+        <a href="contactos.html" class="text-xs font-semibold text-stone-700 hover:text-[#b8933a] underline underline-offset-4">
+          Precisa de ajuda com uma entrega? Contacte-nos
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <div id="loja-footer-mount"></div>
+  <div id="loja-overlays-mount"></div>
+
+  <script src="loja-config.js"></script>
+  <script src="loja-ui.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      AtelierUI.inicializarPaginaInstitucional();
+    });
+  </script>
+</body>
+
+</html>

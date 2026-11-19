@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contactos &amp; Localização — Eva Leite Atelier</title>
+  <meta name="description" content="Contacte o Eva Leite Atelier por WhatsApp, correio eletrónico ou Instagram e consulte a nossa localização e horários em Portugal.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="loja.css">
+</head>
+
+<body>
+  <div id="loja-header-mount"></div>
+
+  <main class="flex-1">
+    <!-- Cabeçalho da Página -->
+    <section class="border-b border-stone-200/80 bg-gradient-to-b from-[#f3efe7]/70 to-[#faf8f4]">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14">
+        <nav class="flex items-center gap-2 text-xs text-stone-500 mb-4" aria-label="Caminho">
+          <a href="index.html" class="hover:text-stone-900 transition-colors">Início</a>
+          <span>/</span>
+          <span class="text-stone-900 font-medium">Contactos &amp; Localização</span>
+        </nav>
+
+        <div class="max-w-2xl space-y-3">
+          <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-stone-200/90 text-[11px] font-semibold uppercase tracking-[0.16em] text-stone-700">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#b8933a]"></span>
+            <span>Atendimento em Portugal</span>
+          </span>
+          <h1 class="text-3xl sm:text-4xl font-semibold tracking-tight text-[#171614]">Contactos &amp; Localização</h1>
+          <p class="text-sm sm:text-base text-stone-600 leading-relaxed">
+            Fale diretamente com a equipa do Eva Leite Atelier sobre peças, medidas, envios ou visite-nos para atendimento e levantamento presencial.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contactos Diretos + Formulário -->
+    <section id="contactos" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+        <!-- Cartões de Contacto -->
+        <div class="lg:col-span-5 space-y-4">
+          <div id="contacto-card-whatsapp" class="bg-white rounded-2xl border border-stone-200/90 p-5 sm:p-6 shadow-sm"></div>
+
+          <div class="bg-white rounded-2xl border border-stone-200/90 p-5 sm:p-6 shadow-sm space-y-3">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-[11px] uppercase tracking-[0.16em] text-[#b8933a] font-semibold">Correio Eletrónico</span>
+              <span class="text-xs text-stone-400">Resposta rápida</span>
+            </div>
+            <p id="contacto-email-valor" class="text-base font-semibold text-stone-900 break-all">evaleiteatelier@gmail.com</p>
+            <div class="flex flex-wrap gap-2 pt-1">
+              <a id="contacto-email-link" href="mailto:evaleiteatelier@gmail.com"
+                class="px-4 py-2 rounded-xl bg-[#171614] hover:bg-stone-800 text-white text-xs font-semibold transition-colors">
+                Enviar E-mail ↗
+              </a>
+              <button type="button" onclick="copiarEmailAtelier()"
+                class="px-4 py-2 rounded-xl border border-stone-300 bg-white hover:border-stone-900 text-stone-800 text-xs font-semibold transition-colors">
+                Copiar E-mail
+              </button>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl border border-stone-200/90 p-5 sm:p-6 shadow-sm space-y-2.5">
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-[11px] uppercase tracking-[0.16em] text-[#b8933a] font-semibold">Redes Sociais</span>
+              <span class="text-xs text-stone-400">Instagram Oficial</span>
+            </div>
+            <p class="text-base font-semibold text-stone-900">@evaleiteaatelier</p>
+            <p class="text-xs text-stone-600 leading-relaxed">Novidades diárias, bastidores do atelier e atendimento por mensagem direta.</p>
+            <a href="https://www.instagram.com/evaleiteaatelier?knvt=MXc3aThjeXlhNndtdA==" target="_blank" rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-stone-300 bg-white hover:border-stone-900 text-stone-800 text-xs font-semibold transition-colors">
+              <span>Abrir Instagram ↗</span>
+            </a>
+          </div>
+
+          <div class="bg-[#f3efe7]/80 rounded-2xl border border-stone-200/90 p-5 sm:p-6 space-y-1.5">
+            <span class="text-[11px] uppercase tracking-[0.16em] text-stone-500 font-semibold">Horário de Atendimento</span>
+            <p id="contacto-horario-valor" class="text-sm font-semibold text-stone-900">Segunda a Sexta, 09h00 – 18h00</p>
+            <p id="contacto-tel-extra" class="hidden text-xs text-stone-600 pt-1"></p>
+          </div>
+        </div>
+
+        <!-- Formulário de Mensagem Rápida -->
+        <div class="lg:col-span-7 bg-white rounded-2xl border border-stone-200/90 p-6 sm:p-8 shadow-sm">
+          <span class="text-[11px] uppercase tracking-[0.18em] text-[#b8933a] font-semibold">Mensagem Direta</span>
+          <h2 class="text-2xl font-semibold tracking-tight text-stone-950 mt-1">Enviar Pedido de Contacto</h2>
+          <p class="text-sm text-stone-600 mt-1.5 mb-6">
+            Preencha os seus dados abaixo para iniciar rapidamente a conversa com o atelier através do WhatsApp ou do seu programa de correio eletrónico.
+          </p>
+
+          <form id="form-contacto-atelier" onsubmit="submeterFormularioContacto(event)" class="space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label for="cnt-nome" class="block text-xs font-semibold text-stone-700 mb-1.5">Nome Completo *</label>
+                <input type="text" id="cnt-nome" required placeholder="O seu nome"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 bg-[#faf8f4] text-sm text-stone-900 focus:outline-none focus:border-[#171614] focus:bg-white">
+              </div>
+              <div>
+                <label for="cnt-email" class="block text-xs font-semibold text-stone-700 mb-1.5">Correio Eletrónico *</label>
+                <input type="email" id="cnt-email" required placeholder="nome@exemplo.pt"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 bg-[#faf8f4] text-sm text-stone-900 focus:outline-none focus:border-[#171614] focus:bg-white">
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label for="cnt-telefone" class="block text-xs font-semibold text-stone-700 mb-1.5">Telemóvel (opcional)</label>
+                <input type="tel" id="cnt-telefone" placeholder="+351 9XX XXX XXX"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 bg-[#faf8f4] text-sm text-stone-900 focus:outline-none focus:border-[#171614] focus:bg-white">
+              </div>
+              <div>
+                <label for="cnt-assunto" class="block text-xs font-semibold text-stone-700 mb-1.5">Assunto</label>
+                <select id="cnt-assunto"
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 bg-[#faf8f4] text-sm text-stone-900 focus:outline-none focus:border-[#171614] focus:bg-white">
+                  <option value="Informações sobre uma peça">Informações sobre uma peça</option>
+                  <option value="Encomenda & Medidas">Encomenda &amp; Medidas</option>
+                  <option value="Levantamento no Atelier">Levantamento no Atelier</option>
+                  <option value="Envio & Entrega">Envio &amp; Entrega</option>
+                  <option value="RGPD / Dados Pessoais">RGPD / Dados Pessoais</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label for="cnt-mensagem" class="block text-xs font-semibold text-stone-700 mb-1.5">Mensagem *</label>
+              <textarea id="cnt-mensagem" rows="4" required placeholder="Indique a referência da peça ou em que podemos ajudar..."
+                class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 bg-[#faf8f4] text-sm text-stone-900 focus:outline-none focus:border-[#171614] focus:bg-white"></textarea>
+            </div>
+
+            <label class="flex items-start gap-2.5 text-xs text-stone-600 cursor-pointer pt-1">
+              <input type="checkbox" id="cnt-rgpd" required class="mt-0.5 h-4 w-4 accent-[#171614] shrink-0">
+              <span>Li e aceito o tratamento dos meus dados exclusivamente para resposta a este contacto, nos termos da política de <a href="rgpd.html" class="underline text-stone-900 hover:text-[#b8933a]">RGPD &amp; Privacidade</a>.</span>
+            </label>
+
+            <div id="cnt-feedback" class="hidden p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-900"></div>
+
+            <div class="flex flex-wrap items-center gap-3 pt-2">
+              <button type="submit" id="cnt-btn-whatsapp"
+                class="hidden px-5 py-3 rounded-xl bg-[#166534] hover:bg-[#14532d] text-white text-xs font-semibold uppercase tracking-wider transition-colors">
+                Enviar por WhatsApp ↗
+              </button>
+              <button type="button" onclick="enviarPorEmailContacto()"
+                class="px-5 py-3 rounded-xl bg-[#171614] hover:bg-stone-800 text-white text-xs font-semibold uppercase tracking-wider transition-colors">
+                Abrir no E-mail ↗
+              </button>
+              <button type="button" onclick="copiarMensagemContacto()"
+                class="px-4 py-3 rounded-xl border border-stone-300 bg-white hover:border-stone-900 text-stone-800 text-xs font-semibold transition-colors">
+                Copiar Mensagem
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Localização do Atelier -->
+    <section id="localizacao" class="border-t border-stone-200/80 bg-[#f3efe7]/55 py-12 md:py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-white rounded-3xl border border-stone-200/90 p-6 sm:p-10 shadow-sm grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <div class="lg:col-span-7 space-y-4">
+            <span class="text-[11px] uppercase tracking-[0.18em] text-[#b8933a] font-semibold">Localização do Atelier</span>
+            <h2 class="text-2xl sm:text-3xl font-semibold tracking-tight text-stone-950">Visitas, Provas &amp; Levantamento Presencial</h2>
+            <div class="space-y-2 text-sm text-stone-700 leading-relaxed">
+              <p class="font-semibold text-stone-900 text-base" id="loc-morada-principal">Praça de Mouzinho de Albuquerque 113, Loja 126 • 4100-359 Porto</p>
+              <p id="loc-nota-atendimento" class="text-stone-600">
+                Atendimento presencial e levantamento de encomendas diretamente no atelier, sem necessidade de marcação prévia.
+              </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+              <div class="p-3.5 rounded-xl bg-[#faf8f4] border border-stone-200/80">
+                <p class="text-[11px] uppercase tracking-wider text-stone-500 font-semibold">Horário de Atendimento</p>
+                <p id="loc-horario" class="text-xs sm:text-sm font-semibold text-stone-900 mt-1">Segunda a Sexta, 09h00 – 18h00</p>
+              </div>
+              <div class="p-3.5 rounded-xl bg-[#faf8f4] border border-stone-200/80">
+                <p class="text-[11px] uppercase tracking-wider text-stone-500 font-semibold">Levantamento Sem Portes</p>
+                <p class="text-xs text-stone-600 mt-1">Disponível diretamente no atelier dentro do horário de atendimento, sem custos de transporte.</p>
+              </div>
+            </div>
+
+            <div id="loc-maps-cta" class="pt-2 flex flex-wrap gap-3"></div>
+          </div>
+
+          <div class="lg:col-span-5">
+            <div class="rounded-2xl bg-[#171614] text-[#f5f0e6] p-6 sm:p-8 space-y-4">
+              <div class="w-11 h-11 rounded-full bg-white/10 text-[#d5b363] flex items-center justify-center">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 21s-7-4.35-7-11a7 7 0 1 1 14 0c0 6.65-7 11-7 11Z"/>
+                  <circle cx="12" cy="10" r="2.5"/>
+                </svg>
+              </div>
+              <h3 class="text-lg font-semibold">Visite-nos no Atelier</h3>
+              <ul class="space-y-2.5 text-xs sm:text-sm text-stone-300 leading-relaxed">
+                <li>1. Visite o espaço diretamente na Praça de Mouzinho de Albuquerque 113, Loja 126 (Porto), sem necessidade de marcação prévia.</li>
+                <li>2. Experimente as peças disponíveis ou levante a sua encomenda no local dentro do horário (09h00 – 18h00), sem custos de transporte.</li>
+                <li>3. Se desejar confirmar a disponibilidade de alguma peça antes da visita, fale connosco por WhatsApp ou e-mail.</li>
+              </ul>
+              <div class="pt-2 flex flex-wrap gap-3 text-xs">
+                <a href="politica-entrega.html" class="text-[#d5b363] hover:underline font-medium">Política de Entrega →</a>
+                <a href="politica-envio.html" class="text-stone-300 hover:underline">Política de Envio →</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="loja-footer-mount"></div>
+  <div id="loja-overlays-mount"></div>
+
+  <script src="loja-config.js"></script>
+  <script src="loja-ui.js"></script>
+  <script>
+    function atualizarPaginaContactos() {
+      const info = AtelierLoja.obterInfoAtelier();
+      const zapAtivo = AtelierLoja.isWhatsAppDisponivel();
+      const zapPendente = !zapAtivo && AtelierLoja.isWhatsAppConfiguradoPendente();
+      const cfgZap = AtelierLoja.obterConfigWhatsApp();
+
+      const emailVal = info.email || 'evaleiteatelier@gmail.com';
+      const emailEl = document.getElementById('contacto-email-valor');
+      const emailLink = document.getElementById('contacto-email-link');
+      if (emailEl) emailEl.textContent = emailVal;
+      if (emailLink) emailLink.href = `mailto:${emailVal}`;
+
+      const horarioEl = document.getElementById('contacto-horario-valor');
+      if (horarioEl && info.horario) horarioEl.textContent = info.horario;
+      const locHorarioEl = document.getElementById('loc-horario');
+      if (locHorarioEl && info.horario) locHorarioEl.textContent = info.horario;
+
+      const telExtra = document.getElementById('contacto-tel-extra');
+      if (telExtra) {
+        if (info.telefoneExibicao) {
+          telExtra.textContent = `Contacto telefónico: ${info.telefoneExibicao}`;
+          telExtra.classList.remove('hidden');
+        } else {
+          telExtra.classList.add('hidden');
+        }
+      }
+
+      const zapCard = document.getElementById('contacto-card-whatsapp');
+      if (zapCard) {
+        if (zapAtivo) {
+          const waUrl = AtelierLoja.gerarLinkWhatsAppGeral();
+          zapCard.innerHTML = `
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <span class="text-[11px] uppercase tracking-[0.16em] text-emerald-700 font-semibold">WhatsApp Oficial</span>
+              <span class="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-semibold uppercase tracking-wider">Ativo</span>
+            </div>
+            <p class="text-base font-semibold text-stone-900 mb-1">${AtelierLoja.escapeHtml(cfgZap.numeroFormatado || 'Atendimento Direto')}</p>
+            <p class="text-xs text-stone-600 leading-relaxed mb-4">Conversa direta com o atelier para encomendas, medidas e levantamentos.</p>
+            <a href="${AtelierLoja.escapeHtml(waUrl)}" target="_blank" rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#166534] hover:bg-[#14532d] text-white text-xs font-semibold transition-colors">
+              ${AtelierUI.svgWhatsApp('w-4 h-4')}
+              <span>Iniciar Conversa no WhatsApp ↗</span>
+            </a>`;
+        } else {
+          const tituloBadge = zapPendente ? 'Ativo • A atualizar número' : 'Indisponível de momento';
+          const badgeCls = zapPendente ? 'bg-sky-100 text-sky-900' : 'bg-amber-100 text-amber-900';
+          const textoInfo = zapPendente
+            ? 'O atendimento direto por WhatsApp já se encontra ativo no site e está apenas a aguardar a atualização do número oficial pelo atelier. Entretanto, utilize o formulário ao lado, e-mail ou Instagram.'
+            : 'O canal de WhatsApp está temporariamente indisponível enquanto concluímos a configuração do número oficial.';
+          zapCard.innerHTML = `
+            <div class="flex items-center justify-between gap-2 mb-2">
+              <span class="text-[11px] uppercase tracking-[0.16em] text-stone-500 font-semibold">WhatsApp Atelier</span>
+              <span class="px-2.5 py-0.5 rounded-full ${badgeCls} text-[10px] font-semibold uppercase tracking-wider">${tituloBadge}</span>
+            </div>
+            <p class="text-sm font-semibold text-stone-900 mb-1">Atendimento Direto</p>
+            <p class="text-xs text-stone-600 leading-relaxed">${textoInfo}</p>`;
+        }
+      }
+
+      const btnFormZap = document.getElementById('cnt-btn-whatsapp');
+      if (btnFormZap) {
+        btnFormZap.classList.toggle('hidden', !zapAtivo);
+      }
+
+      const locMoradaEl = document.getElementById('loc-morada-principal');
+      if (locMoradaEl) {
+        locMoradaEl.textContent = info.moradaCompleta || info.localidade || 'Portugal';
+      }
+      const locNotaEl = document.getElementById('loc-nota-atendimento');
+      if (locNotaEl && info.notaAtendimento) {
+        locNotaEl.textContent = info.notaAtendimento;
+      }
+
+      const mapsCta = document.getElementById('loc-maps-cta');
+      if (mapsCta) {
+        if (info.mapsLink) {
+          mapsCta.innerHTML = `
+            <a href="${AtelierLoja.escapeHtml(info.mapsLink)}" target="_blank" rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#171614] hover:bg-stone-800 text-white text-xs font-semibold uppercase tracking-wider transition-colors">
+              <span>Abrir no Google Maps</span>
+              <span>↗</span>
+            </a>`;
+        } else {
+          mapsCta.innerHTML = `
+            <a href="#contactos" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-stone-300 bg-white hover:border-stone-900 text-stone-800 text-xs font-semibold uppercase tracking-wider transition-colors">
+              <span>Pedir Localização por Contacto</span>
+            </a>`;
+        }
+      }
+    }
+
+    function copiarEmailAtelier() {
+      const info = AtelierLoja.obterInfoAtelier();
+      AtelierUI.copiarTextoComFeedback(info.email || 'evaleiteatelier@gmail.com', 'E-mail copiado!');
+    }
+
+    function construirMensagemFormulario() {
+      const form = document.getElementById('form-contacto-atelier');
+      if (!form.reportValidity()) return null;
+      const nome = document.getElementById('cnt-nome').value.trim();
+      const email = document.getElementById('cnt-email').value.trim();
+      const tel = document.getElementById('cnt-telefone').value.trim();
+      const assunto = document.getElementById('cnt-assunto').value.trim();
+      const msg = document.getElementById('cnt-mensagem').value.trim();
+
+      const texto = [
+        `Olá Eva Leite Atelier!`,
+        `Assunto: ${assunto}`,
+        `Nome: ${nome}`,
+        `E-mail: ${email}`,
+        tel ? `Telemóvel: ${tel}` : '',
+        `Mensagem: ${msg}`
+      ].filter(Boolean).join('\n');
+      return { assunto, texto };
+    }
+
+    function submeterFormularioContacto(event) {
+      event.preventDefault();
+      const dados = construirMensagemFormulario();
+      if (!dados) return;
+      if (AtelierLoja.isWhatsAppDisponivel()) {
+        const wa = AtelierLoja.gerarLinkWhatsAppGeral(dados.texto);
+        window.open(wa, '_blank', 'noopener,noreferrer');
+        mostrarFeedbackContacto('Abrimos o WhatsApp com a sua mensagem já preenchida.');
+      } else {
+        enviarPorEmailContacto();
+      }
+    }
+
+    function enviarPorEmailContacto() {
+      const dados = construirMensagemFormulario();
+      if (!dados) return;
+      const info = AtelierLoja.obterInfoAtelier();
+      const destino = info.email || 'evaleiteatelier@gmail.com';
+      const mailto = `mailto:${encodeURIComponent(destino)}?subject=${encodeURIComponent('[Site Atelier] ' + dados.assunto)}&body=${encodeURIComponent(dados.texto)}`;
+      window.location.href = mailto;
+      mostrarFeedbackContacto('A preparar o envio através da sua aplicação de correio eletrónico.');
+    }
+
+    function copiarMensagemContacto() {
+      const dados = construirMensagemFormulario();
+      if (!dados) return;
+      AtelierUI.copiarTextoComFeedback(dados.texto, 'Mensagem copiada! Pode colar no Instagram ou e-mail.');
+    }
+
+    function mostrarFeedbackContacto(msg) {
+      const el = document.getElementById('cnt-feedback');
+      if (!el) return;
+      el.textContent = msg;
+      el.classList.remove('hidden');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      AtelierUI.inicializarPaginaInstitucional(() => {
+        atualizarPaginaContactos();
+      });
+    });
+  </script>
+</body>
+
+</html>
+

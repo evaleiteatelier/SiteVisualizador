@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Política de Cookies — Eva Leite Atelier</title>
+  <meta name="description" content="Consulte a Política de Cookies e Armazenamento Local do Eva Leite Atelier e faça a gestão das suas preferências a qualquer momento.">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="loja.css">
+</head>
+
+<body>
+  <div id="loja-header-mount"></div>
+
+  <main class="flex-1">
+    <section class="border-b border-stone-200/80 bg-gradient-to-b from-[#f3efe7]/70 to-[#faf8f4]">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14">
+        <nav class="flex items-center gap-2 text-xs text-stone-500 mb-4" aria-label="Caminho">
+          <a href="index.html" class="hover:text-stone-900 transition-colors">Início</a>
+          <span>/</span>
+          <span class="text-stone-900 font-medium">Política de Cookies</span>
+        </nav>
+
+        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-stone-200/90 text-[11px] font-semibold uppercase tracking-[0.16em] text-stone-700 mb-3">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#b8933a]"></span>
+          <span>Transparência Digital</span>
+        </span>
+        <h1 class="text-3xl sm:text-4xl font-semibold tracking-tight text-[#171614]">Política de Cookies</h1>
+        <p class="text-sm sm:text-base text-stone-600 mt-2 leading-relaxed">
+          Saiba quais as tecnologias de armazenamento que este site utiliza, para que servem e como pode gerir ou revogar o seu consentimento em qualquer altura.
+        </p>
+      </div>
+    </section>
+
+    <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14 space-y-6">
+      <!-- Estado Atual & Gestão Direta -->
+      <div class="bg-white rounded-2xl border border-stone-200/90 p-6 sm:p-8 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <span class="text-[11px] uppercase tracking-[0.16em] text-[#b8933a] font-semibold">O Seu Consentimento Atual</span>
+          <p id="cookies-estado-atual" class="text-base font-semibold text-stone-900 mt-1">A verificar preferências...</p>
+          <p id="cookies-data-atual" class="text-xs text-stone-500 mt-0.5"></p>
+        </div>
+        <div class="flex flex-wrap gap-2 shrink-0">
+          <button type="button" onclick="AtelierUI.abrirPreferenciasCookies()"
+            class="px-4 py-2.5 rounded-full border border-stone-300 bg-white hover:border-stone-900 text-stone-800 text-xs font-semibold">
+            Gerir Preferências
+          </button>
+          <button type="button" onclick="AtelierUI.aceitarTodosCookies()"
+            class="px-4 py-2.5 rounded-full bg-[#171614] hover:bg-stone-800 text-white text-xs font-semibold">
+            Aceitar Todos
+          </button>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-stone-200/90 p-6 sm:p-8 shadow-sm space-y-3">
+        <h2 class="text-lg font-semibold text-stone-950">1. O que são Cookies e Armazenamento Local?</h2>
+        <p class="text-sm text-stone-600 leading-relaxed">
+          Cookies e mecanismos equivalentes de armazenamento local do navegador (como o `localStorage`) são pequenos registos guardados no seu dispositivo quando visita um website. Servem para manter funcionalidades essenciais em funcionamento, como guardar as suas peças favoritas ou memorizar a sua decisão sobre privacidade.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-stone-200/90 p-6 sm:p-8 shadow-sm space-y-4">
+        <h2 class="text-lg font-semibold text-stone-950">2. Registos Utilizados neste Website</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs sm:text-sm border-collapse">
+            <thead>
+              <tr class="border-b border-stone-200 text-stone-500 uppercase text-[11px] tracking-wider">
+                <th class="py-2.5 pr-4 font-semibold">Chave / Tecnologia</th>
+                <th class="py-2.5 pr-4 font-semibold">Categoria</th>
+                <th class="py-2.5 font-semibold">Finalidade</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-stone-100 text-stone-700">
+              <tr>
+                <td class="py-3 pr-4 font-mono text-xs">eva_atelier_favoritos_v1</td>
+                <td class="py-3 pr-4"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[11px] font-medium">Estritamente Necessário</span></td>
+                <td class="py-3">Guarda localmente as peças marcadas em «Os Meus Favoritos» entre sessões.</td>
+              </tr>
+              <tr>
+                <td class="py-3 pr-4 font-mono text-xs">eva_atelier_cookies_v1</td>
+                <td class="py-3 pr-4"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[11px] font-medium">Estritamente Necessário</span></td>
+                <td class="py-3">Memoriza a sua escolha de consentimento para não repetir o aviso a cada página.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="text-sm text-stone-600 leading-relaxed pt-1">
+          <strong>Sem rastreamento publicitário:</strong> O Eva Leite Atelier não utiliza cookies de publicidade comportamental ou rastreadores invasivos de terceiros neste catálogo público. Caso siga uma ligação externa para a Vinted, WhatsApp, Instagram ou Google Maps, aplicam-se as políticas próprias dessas plataformas.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-stone-200/90 p-6 sm:p-8 shadow-sm space-y-3">
+        <h2 class="text-lg font-semibold text-stone-950">3. Como Desativar ou Limpar Cookies no Navegador</h2>
+        <p class="text-sm text-stone-600 leading-relaxed">
+          Para além do botão «Gerir Preferências» disponível nesta página e no rodapé do site, pode bloquear ou apagar cookies e armazenamento local a qualquer momento nas definições do seu navegador (Google Chrome, Safari, Mozilla Firefox ou Microsoft Edge). Note que limpar o armazenamento do navegador apagará a lista local de favoritos guardada no dispositivo.
+        </p>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-between gap-4 pt-2">
+        <a href="rgpd.html" class="px-5 py-2.5 rounded-full border border-stone-300 bg-white text-stone-800 text-xs font-semibold uppercase tracking-wider hover:border-stone-900 transition-colors">
+          ← Consultar RGPD &amp; Privacidade
+        </a>
+        <a href="contactos.html" class="text-xs font-semibold text-stone-700 hover:text-[#b8933a] underline underline-offset-4">
+          Alguma dúvida? Fale connosco
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <div id="loja-footer-mount"></div>
+  <div id="loja-overlays-mount"></div>
+
+  <script src="loja-config.js"></script>
+  <script src="loja-ui.js"></script>
+  <script>
+    function atualizarEstadoCookiesPagina() {
+      const consent = AtelierLoja.getConsentimentoCookies();
+      const statusEl = document.getElementById('cookies-estado-atual');
+      const dataEl = document.getElementById('cookies-data-atual');
+      if (statusEl) {
+        if (!consent.decidido) {
+          statusEl.textContent = 'Pendente de escolha (apenas essenciais ativos)';
+        } else {
+          statusEl.textContent = consent.preferencias
+            ? 'Todos os cookies funcionais aceites'
+            : 'Apenas cookies estritamente necessários ativos';
+        }
+      }
+      if (dataEl) {
+        if (consent.decidido && consent.data) {
+          const dt = new Date(consent.data);
+          dataEl.textContent = !Number.isNaN(dt.getTime())
+            ? `Última atualização: ${dt.toLocaleDateString('pt-PT')} às ${dt.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' })}`
+            : '';
+        } else {
+          dataEl.textContent = 'Pode alterar a sua decisão em qualquer altura.';
+        }
+      }
+    }
+
+    window.addEventListener('atelier:cookies-atualizados', atualizarEstadoCookiesPagina);
+
+    document.addEventListener('DOMContentLoaded', () => {
+      AtelierUI.inicializarPaginaInstitucional(() => {
+        atualizarEstadoCookiesPagina();
+      });
+      atualizarEstadoCookiesPagina();
+    });
+  </script>
+</body>
+
+</html>
+

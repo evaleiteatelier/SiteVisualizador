@@ -19,22 +19,36 @@
   const ATELIER_CONFIG = {
     nome: 'Eva Leite Atelier',
     tagline: 'Moda Autoral & Peças Únicas',
-    instagramHandle: '@eva_leite_atelier',
-    instagramUrl: 'https://www.instagram.com/eva_leite_atelier/',
+    instagramHandle: '@evaleiteaatelier',
+    instagramUrl: 'https://www.instagram.com/evaleiteaatelier?knvt=MXc3aThjeXlhNndtdA==',
     dominioPublico: 'https://evaleiteatelier.com',
     // Configuração predefinida do WhatsApp (sincronizada também com o painel interno Gestão do Site).
-    // Quando ativo: false ou sem número válido, o canal surge como "Indisponível de momento".
+    // O canal já está ativo; assim que um número válido for guardado no painel, os botões ficam funcionais de imediato.
     whatsapp: {
-      ativo: false,
+      ativo: true,
       numero: '',
       mensagemPadrao: 'Olá! Vi esta peça na loja do Eva Leite Atelier e gostaria de finalizar a compra por WhatsApp:'
+    },
+    atelierInfo: {
+      email: 'evaleiteatelier@gmail.com',
+      telefone: '',
+      morada: 'Praça de Mouzinho de Albuquerque 113, Loja 126',
+      codigoPostal: '4100-359',
+      localidade: 'Porto',
+      mapsUrl: '',
+      horario: 'Segunda a Sexta, 09h00 – 18h00',
+      notaAtendimento: 'Atendimento presencial e levantamento de encomendas diretamente no atelier, sem necessidade de marcação prévia.',
+      entidadeLegal: 'Eva Leite Atelier',
+      nif: ''
     }
   };
 
   const FAVORITOS_STORAGE_KEY = 'eva_atelier_favoritos_v1';
+  const COOKIES_STORAGE_KEY = 'eva_atelier_cookies_v1';
   let _supabaseClient = null;
   let _categoriasDinamicas = CATEGORIAS_PADRAO.map(c => ({ ...c }));
   let _whatsappRemoto = null;
+  let _atelierInfoRemoto = null;
 
   function getSupabase() {
     if (_supabaseClient) return _supabaseClient;
@@ -83,15 +97,43 @@
   }
 
   function normalizarNumeroWhatsApp(raw) {
-    return String(raw ?? '').replace(/\D+/g, '');
+    let digits = String(raw ?? '').replace(/\D+/g, '');
+    if (digits.startsWith('00')) {
+      digits = digits.slice(2);
+    }
+    if (digits.length === 9 && /^[29]/.test(digits)) {
+      digits = '351' + digits;
+    }
+    return digits;
+  }
+
+  function formatarNumeroWhatsApp(raw) {
+    const digits = normalizarNumeroWhatsApp(raw);
+    if (!digits) return '';
+    if (digits.startsWith('351') && digits.length === 12) {
+      const local = digits.slice(3);
+      return `+351 ${local.slice(0, 3)} ${local.slice(3, 6)} ${local.slice(6)}`;
+    }
+    return `+${digits}`;
   }
 
   function obterConfigWhatsApp() {
     const base = ATELIER_CONFIG.whatsapp || {};
-    if (!_whatsappRemoto || typeof _whatsappRemoto !== 'object') return { ...base };
+    if (!_whatsappRemoto || typeof _whatsappRemoto !== 'object') {
+      return {
+        ...base,
+        numeroFormatado: formatarNumeroWhatsApp(base.numero)
+      };
+    }
+    const numeroFinal = String(_whatsappRemoto.numero || base.numero || '');
+    const desativadoManual = Boolean(_whatsappRemoto.desativadoManual);
+    const ativoResolvido = numeroFinal
+      ? Boolean(_whatsappRemoto.ativo)
+      : (desativadoManual ? false : true);
     return {
-      ativo: Boolean(_whatsappRemoto.ativo),
-      numero: String(_whatsappRemoto.numero || base.numero || ''),
+      ativo: ativoResolvido,
+      numero: numeroFinal,
+      numeroFormatado: formatarNumeroWhatsApp(numeroFinal),
       mensagemPadrao: String(_whatsappRemoto.mensagemPadrao || base.mensagemPadrao || '')
     };
   }
@@ -100,6 +142,52 @@
     const cfg = obterConfigWhatsApp();
     const digits = normalizarNumeroWhatsApp(cfg.numero);
     return Boolean(cfg.ativo && digits.length >= 9);
+  }
+
+  function isWhatsAppConfiguradoPendente() {
+    const cfg = obterConfigWhatsApp();
+    const digits = normalizarNumeroWhatsApp(cfg.numero);
+    return Boolean(cfg.ativo && digits.length < 9);
+  }
+
+  function obterInfoAtelier() {
+    const base = ATELIER_CONFIG.atelierInfo || {};
+    const rem = _atelierInfoRemoto && typeof _atelierInfoRemoto === 'object' ? _atelierInfoRemoto : {};
+    const pick = (k, fallback = '') => String(rem[k] !== undefined && rem[k] !== null ? rem[k] : (base[k] || fallback)).trim();
+
+    const email = pick('email', 'evaleiteatelier@gmail.com');
+    const telefoneManual = pick('telefone');
+    const zapCfg = obterConfigWhatsApp();
+    const zapFormatado = zapCfg.ativo && normalizarNumeroWhatsApp(zapCfg.numero).length >= 9 ? zapCfg.numeroFormatado : '';
+    const telefoneExibicao = zapFormatado || telefoneManual;
+
+    const morada = pick('morada');
+    const codigoPostal = pick('codigoPostal');
+    const localidade = pick('localidade', 'Portugal');
+    const partesMorada = [morada, [codigoPostal, localidade].filter(Boolean).join(' ')].filter(Boolean);
+    const moradaCompleta = partesMorada.join(' • ');
+
+    const mapsUrlRaw = pick('mapsUrl');
+    let mapsLink = validarUrlHttp(mapsUrlRaw);
+    if (!mapsLink && morada) {
+      mapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(partesMorada.join(', '))}`;
+    }
+
+    return {
+      email,
+      telefone: telefoneManual,
+      telefoneExibicao,
+      morada,
+      codigoPostal,
+      localidade,
+      moradaCompleta,
+      mapsUrl: validarUrlHttp(mapsUrlRaw),
+      mapsLink,
+      horario: pick('horario', 'Segunda a Sexta, 09h00 – 18h00'),
+      notaAtendimento: pick('notaAtendimento', 'Atendimento presencial e levantamento de encomendas diretamente no atelier, sem necessidade de marcação prévia.'),
+      entidadeLegal: pick('entidadeLegal', 'Eva Leite Atelier'),
+      nif: pick('nif')
+    };
   }
 
   function isVintedDisponivel(produto) {
@@ -162,6 +250,36 @@
       `• Peça: ${nome}`,
       preco ? `• Valor: ${preco}` : '',
       linkPeca ? `• Ligação: ${linkPeca}` : ''
+    ].filter(Boolean);
+    return `https://wa.me/${digits}?text=${encodeURIComponent(linhas.join('\n'))}`;
+  }
+
+  function gerarLinkWhatsAppGeral(mensagemCustom) {
+    if (!isWhatsAppDisponivel()) return '';
+    const cfg = obterConfigWhatsApp();
+    const digits = normalizarNumeroWhatsApp(cfg.numero);
+    const texto = String(mensagemCustom || 'Olá! Gostaria de falar com o Eva Leite Atelier sobre uma peça.').trim();
+    return `https://wa.me/${digits}?text=${encodeURIComponent(texto)}`;
+  }
+
+  function gerarLinkWhatsAppFavoritos(produtos) {
+    if (!isWhatsAppDisponivel()) return '';
+    const lista = Array.isArray(produtos) ? produtos.filter(Boolean) : [];
+    if (lista.length === 0) return gerarLinkWhatsAppGeral();
+    if (lista.length === 1) return gerarLinkWhatsApp(lista[0]);
+    const cfg = obterConfigWhatsApp();
+    const digits = normalizarNumeroWhatsApp(cfg.numero);
+    let total = 0;
+    const itensTexto = lista.map((p, i) => {
+      const info = obterPrecosProduto(p);
+      if (Number.isFinite(Number(info.precoAtual))) total += Number(info.precoAtual);
+      const precoTxt = info.precoAtualFormatado ? ` (${info.precoAtualFormatado})` : '';
+      return `${i + 1}. ${String(p.nome || 'Peça').trim()}${precoTxt} — ${getUrlAbsolutaProduto(p)}`;
+    });
+    const linhas = [
+      'Olá! Gostaria de saber mais ou finalizar os seguintes favoritos no Eva Leite Atelier:',
+      ...itensTexto,
+      total > 0 ? `Total estimado: ${formatarPreco(total)}` : ''
     ].filter(Boolean);
     return `https://wa.me/${digits}?text=${encodeURIComponent(linhas.join('\n'))}`;
   }
@@ -245,6 +363,11 @@
       _whatsappRemoto = parsed.whatsapp;
     } else {
       _whatsappRemoto = null;
+    }
+    if (parsed && parsed.atelierInfo && typeof parsed.atelierInfo === 'object') {
+      _atelierInfoRemoto = parsed.atelierInfo;
+    } else {
+      _atelierInfoRemoto = null;
     }
 
     const catById = new Map(categorias.map(c => [c.id, c]));
@@ -337,7 +460,8 @@
       produtoImagensExtras,
       produtoAcessorios,
       produtoPromos,
-      whatsapp: obterConfigWhatsApp()
+      whatsapp: obterConfigWhatsApp(),
+      atelierInfo: obterInfoAtelier()
     };
   }
 
@@ -436,6 +560,37 @@
     salvarFavoritos(getFavoritos().filter(x => x !== key));
   }
 
+  function getConsentimentoCookies() {
+    try {
+      const raw = global.localStorage.getItem(COOKIES_STORAGE_KEY);
+      if (!raw) return { decidido: false, essenciais: true, preferencias: false, data: null };
+      const parsed = JSON.parse(raw);
+      return {
+        decidido: Boolean(parsed && parsed.decidido),
+        essenciais: true,
+        preferencias: Boolean(parsed && parsed.preferencias),
+        data: parsed && parsed.data ? String(parsed.data) : null
+      };
+    } catch (_) {
+      return { decidido: false, essenciais: true, preferencias: false, data: null };
+    }
+  }
+
+  function salvarConsentimentoCookies(preferenciasAtivas) {
+    const payload = {
+      decidido: true,
+      essenciais: true,
+      preferencias: Boolean(preferenciasAtivas),
+      data: new Date().toISOString()
+    };
+    try {
+      global.localStorage.setItem(COOKIES_STORAGE_KEY, JSON.stringify(payload));
+    } catch (_) {
+      // Ignora erro de quota ou modo privado restrito
+    }
+    return payload;
+  }
+
   global.AtelierLoja = {
     SUPABASE_URL,
     SUPABASE_ANON_KEY,
@@ -447,14 +602,19 @@
     validarUrlHttp,
     normalizarUrlImagem,
     normalizarNumeroWhatsApp,
+    formatarNumeroWhatsApp,
     obterConfigWhatsApp,
     isWhatsAppDisponivel,
+    isWhatsAppConfiguradoPendente,
+    obterInfoAtelier,
     isVintedDisponivel,
     formatarPreco,
     slugify,
     getUrlProduto,
     getUrlAbsolutaProduto,
     gerarLinkWhatsApp,
+    gerarLinkWhatsAppGeral,
+    gerarLinkWhatsAppFavoritos,
     classificarCategoriaAutomatica,
     classificarCategoria,
     getCategoriasComTodas,
@@ -467,6 +627,8 @@
     getFavoritos,
     isFavorito,
     toggleFavorito,
-    removerFavorito
+    removerFavorito,
+    getConsentimentoCookies,
+    salvarConsentimentoCookies
   };
 })(window);
