@@ -164,9 +164,12 @@
         return;
       }
 
-      if (Number.isFinite(Number(p.preco))) soma += Number(p.preco);
+      const infoPreco = AtelierLoja.obterPrecosProduto(p);
+      if (Number.isFinite(Number(infoPreco.precoAtual))) soma += Number(infoPreco.precoAtual);
       const nome = AtelierLoja.escapeHtml(p.nome);
-      const preco = AtelierLoja.escapeHtml(AtelierLoja.formatarPreco(p.preco));
+      const precoHtml = infoPreco.emPromo
+        ? `<div class="flex items-baseline gap-1.5 mt-1"><span class="text-sm font-semibold text-rose-700">${AtelierLoja.escapeHtml(infoPreco.precoAtualFormatado)}</span><span class="text-xs text-stone-400 line-through">${AtelierLoja.escapeHtml(infoPreco.precoOriginalFormatado)}</span></div>`
+        : `<span class="text-sm font-semibold text-stone-800 mt-1">${AtelierLoja.escapeHtml(infoPreco.precoAtualFormatado)}</span>`;
       const imgUrl = AtelierLoja.normalizarUrlImagem(p.imagem_url);
       const urlPeca = AtelierLoja.getUrlProduto(p);
 
@@ -177,7 +180,7 @@
           </a>
           <div class="flex-1 min-w-0 flex flex-col">
             <a href="${urlPeca}" class="text-sm font-medium text-stone-900 hover:text-[#b8933a] transition-colors line-clamp-2">${nome}</a>
-            <span class="text-sm font-semibold text-stone-800 mt-1">${preco}</span>
+            ${precoHtml}
             <div class="mt-auto pt-2 flex items-center justify-between gap-2">
               <a href="${urlPeca}" class="text-xs font-medium text-[#171614] underline underline-offset-4 hover:text-[#b8933a]">
                 Escolher como comprar
@@ -484,16 +487,25 @@
     const idStr = AtelierLoja.escapeHtml(produto.id);
     const nome = AtelierLoja.escapeHtml(produto.nome);
     const desc = AtelierLoja.escapeHtml(String(produto.descricao || '').trim());
-    const preco = AtelierLoja.escapeHtml(AtelierLoja.formatarPreco(produto.preco));
+    const infoPreco = AtelierLoja.obterPrecosProduto(produto);
     const urlProduto = AtelierLoja.getUrlProduto(produto);
     const imgUrl = AtelierLoja.normalizarUrlImagem(produto.imagem_url);
     const temVinted = AtelierLoja.isVintedDisponivel(produto);
     const temZap = AtelierLoja.isWhatsAppDisponivel();
     const favorito = AtelierLoja.isFavorito(produto.id);
 
-    const badgeEsquerda = mostrarNovo
-      ? '<span class="px-2.5 py-1 rounded-full bg-[#171614]/90 text-white text-[10px] font-semibold tracking-wider uppercase backdrop-blur-sm">Novidade</span>'
-      : `<span class="px-2.5 py-1 rounded-full bg-white/90 text-stone-800 text-[10px] font-medium tracking-wider uppercase backdrop-blur-sm">${AtelierLoja.escapeHtml(cat.label)}</span>`;
+    const badgeEsquerda = infoPreco.emPromo
+      ? `<span class="px-2.5 py-1 rounded-full bg-rose-700 text-white text-[10px] font-semibold tracking-wider uppercase shadow-sm">${infoPreco.descontoPercentagem ? `Promoção -${infoPreco.descontoPercentagem}%` : 'Em Promoção'}</span>`
+      : mostrarNovo
+        ? '<span class="px-2.5 py-1 rounded-full bg-[#171614]/90 text-white text-[10px] font-semibold tracking-wider uppercase backdrop-blur-sm">Novidade</span>'
+        : `<span class="px-2.5 py-1 rounded-full bg-white/90 text-stone-800 text-[10px] font-medium tracking-wider uppercase backdrop-blur-sm">${AtelierLoja.escapeHtml(cat.label)}</span>`;
+
+    const precoBlocoHtml = infoPreco.emPromo
+      ? `<div class="flex flex-wrap items-baseline gap-1.5 min-w-0">
+           <span class="text-base sm:text-lg font-semibold text-rose-700 whitespace-nowrap">${AtelierLoja.escapeHtml(infoPreco.precoAtualFormatado)}</span>
+           ${infoPreco.precoOriginalFormatado ? `<span class="text-xs text-stone-400 line-through whitespace-nowrap">${AtelierLoja.escapeHtml(infoPreco.precoOriginalFormatado)}</span>` : ''}
+         </div>`
+      : `<span class="text-base sm:text-lg font-semibold text-stone-950 whitespace-nowrap">${AtelierLoja.escapeHtml(infoPreco.precoAtualFormatado) || 'Sob consulta'}</span>`;
 
     const chipCanais = `
       <div class="flex items-center gap-1.5 flex-wrap justify-end">
@@ -540,7 +552,7 @@
           ${desc ? `<p class="hidden sm:line-clamp-2 text-xs text-stone-500 mt-1.5 leading-relaxed">${desc}</p>` : ''}
 
           <div class="mt-auto pt-3 flex items-center justify-between gap-2 border-t border-stone-100">
-            <span class="text-base sm:text-lg font-semibold text-stone-950 whitespace-nowrap">${preco || 'Sob consulta'}</span>
+            ${precoBlocoHtml}
             ${chipCanais}
           </div>
         </div>

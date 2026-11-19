@@ -66,12 +66,25 @@
     <!-- Conteúdo Principal da Peça -->
     <section id="pdp-content" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
       <!-- Galeria / Fotografia -->
-      <div class="lg:col-span-7 space-y-4">
+      <div class="lg:col-span-7 space-y-3.5">
         <div class="relative bg-white rounded-2xl border border-stone-200/90 overflow-hidden shadow-sm group">
           <button type="button" onclick="abrirLightbox()" aria-label="Ampliar fotografia da peça"
             class="block w-full aspect-[3/4] max-h-[760px] bg-[#efebe3] cursor-zoom-in overflow-hidden">
             <img id="pdp-imagem" src="" alt="" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]">
           </button>
+
+          <button type="button" id="pdp-prev-foto" onclick="mudarFotoPdp(-1, event)" aria-label="Fotografia anterior"
+            class="hidden absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 hover:bg-white text-stone-900 shadow-md flex items-center justify-center text-lg transition-all">
+            ‹
+          </button>
+          <button type="button" id="pdp-next-foto" onclick="mudarFotoPdp(1, event)" aria-label="Fotografia seguinte"
+            class="hidden absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 hover:bg-white text-stone-900 shadow-md flex items-center justify-center text-lg transition-all">
+            ›
+          </button>
+
+          <span id="pdp-foto-contador"
+            class="hidden absolute bottom-4 left-4 px-3 py-1 rounded-full bg-[#171614]/80 text-white text-[11px] font-medium backdrop-blur-sm">
+          </span>
 
           <button type="button" onclick="abrirLightbox()"
             class="absolute bottom-4 right-4 px-3.5 py-2 rounded-full bg-white/95 backdrop-blur-sm text-stone-900 text-xs font-medium shadow-md flex items-center gap-1.5 hover:bg-white transition-colors">
@@ -82,6 +95,8 @@
             <span>Ampliar foto</span>
           </button>
         </div>
+
+        <div id="pdp-galeria-thumbs" class="hidden grid grid-cols-5 sm:grid-cols-6 gap-2.5"></div>
       </div>
 
       <!-- Painel de Detalhes & Escolha do Canal de Compra -->
@@ -187,6 +202,18 @@
             <p id="pdp-accordion-zap" class="text-xs sm:text-sm text-stone-600 leading-relaxed pt-2.5"></p>
           </details>
         </div>
+
+        <!-- Acessórios Utilizados ("Complete o Look") -->
+        <div id="pdp-acessorios-wrap" class="hidden pt-2 space-y-3">
+          <div class="flex items-center justify-between gap-2">
+            <div>
+              <h2 class="text-xs font-semibold uppercase tracking-[0.16em] text-stone-900">Acessórios Utilizados</h2>
+              <p class="text-[11px] text-stone-500 mt-0.5">Complementos e peças usadas nesta produção</p>
+            </div>
+            <span id="pdp-acessorios-count" class="px-2.5 py-0.5 rounded-full bg-[#f3efe7] border border-stone-200 text-stone-700 text-[10px] font-semibold"></span>
+          </div>
+          <div id="pdp-acessorios-lista" class="space-y-2.5"></div>
+        </div>
       </div>
     </section>
 
@@ -222,7 +249,15 @@
       class="absolute top-5 right-5 w-10 h-10 rounded-full bg-white/15 text-white hover:bg-white/25 flex items-center justify-center text-lg">
       ✕
     </button>
+    <button type="button" id="pdp-lb-prev" onclick="mudarFotoPdp(-1, event)" aria-label="Foto anterior"
+      class="hidden absolute left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/15 text-white hover:bg-white/25 flex items-center justify-center text-2xl">
+      ‹
+    </button>
     <img id="pdp-lightbox-img" src="" alt="" class="max-h-[90vh] max-w-[92vw] rounded-xl object-contain shadow-2xl">
+    <button type="button" id="pdp-lb-next" onclick="mudarFotoPdp(1, event)" aria-label="Foto seguinte"
+      class="hidden absolute right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/15 text-white hover:bg-white/25 flex items-center justify-center text-2xl">
+      ›
+    </button>
   </div>
 
   <div id="loja-footer-mount"></div>
@@ -232,20 +267,82 @@
   <script src="loja-ui.js"></script>
   <script>
     let _produtoAtual = null;
+    let _galeriaAtual = [];
+    let _fotoAtivaIdx = 0;
 
     function obterIdDaUrl() {
       const params = new URLSearchParams(window.location.search);
       return params.get('id');
     }
 
+    function renderGaleriaPdp() {
+      const total = _galeriaAtual.length;
+      if (_fotoAtivaIdx >= total) _fotoAtivaIdx = 0;
+      const srcAtual = _galeriaAtual[_fotoAtivaIdx] || '';
+
+      const imgEl = document.getElementById('pdp-imagem');
+      if (imgEl) {
+        imgEl.src = srcAtual;
+        imgEl.alt = (_produtoAtual && _produtoAtual.nome) || 'Peça Eva Leite Atelier';
+      }
+
+      const lbImg = document.getElementById('pdp-lightbox-img');
+      if (lbImg) {
+        lbImg.src = srcAtual;
+        lbImg.alt = (_produtoAtual && _produtoAtual.nome) || '';
+      }
+
+      const multi = total > 1;
+      const prevBtn = document.getElementById('pdp-prev-foto');
+      const nextBtn = document.getElementById('pdp-next-foto');
+      const contEl = document.getElementById('pdp-foto-contador');
+      const lbPrev = document.getElementById('pdp-lb-prev');
+      const lbNext = document.getElementById('pdp-lb-next');
+      const thumbsEl = document.getElementById('pdp-galeria-thumbs');
+
+      if (prevBtn) prevBtn.classList.toggle('hidden', !multi);
+      if (nextBtn) nextBtn.classList.toggle('hidden', !multi);
+      if (lbPrev) lbPrev.classList.toggle('hidden', !multi);
+      if (lbNext) lbNext.classList.toggle('hidden', !multi);
+
+      if (contEl) {
+        contEl.classList.toggle('hidden', !multi);
+        contEl.textContent = `${_fotoAtivaIdx + 1} / ${total}`;
+      }
+
+      if (thumbsEl) {
+        if (!multi) {
+          thumbsEl.classList.add('hidden');
+          thumbsEl.innerHTML = '';
+        } else {
+          thumbsEl.classList.remove('hidden');
+          thumbsEl.innerHTML = _galeriaAtual.map((url, idx) => `
+            <button type="button" onclick="selecionarFotoPdp(${idx})" aria-label="Ver fotografia ${idx + 1}"
+              class="aspect-[3/4] rounded-xl overflow-hidden bg-stone-100 border-2 transition-all ${idx === _fotoAtivaIdx ? 'border-[#171614] ring-2 ring-[#171614]/15' : 'border-transparent opacity-70 hover:opacity-100'}">
+              <img src="${AtelierLoja.escapeHtml(url)}" alt="${AtelierLoja.escapeHtml((_produtoAtual && _produtoAtual.nome) || 'Peça')} - foto ${idx + 1}" class="w-full h-full object-cover">
+            </button>
+          `).join('');
+        }
+      }
+    }
+
+    function selecionarFotoPdp(idx) {
+      if (_galeriaAtual.length === 0) return;
+      _fotoAtivaIdx = ((idx % _galeriaAtual.length) + _galeriaAtual.length) % _galeriaAtual.length;
+      renderGaleriaPdp();
+    }
+
+    function mudarFotoPdp(delta, event) {
+      if (event) event.stopPropagation();
+      selecionarFotoPdp(_fotoAtivaIdx + delta);
+    }
+
     function abrirLightbox() {
-      if (!_produtoAtual) return;
-      const imgUrl = AtelierLoja.normalizarUrlImagem(_produtoAtual.imagem_url);
-      if (!imgUrl) return;
+      if (_galeriaAtual.length === 0) return;
       const modal = document.getElementById('pdp-lightbox');
       const img = document.getElementById('pdp-lightbox-img');
-      img.src = imgUrl;
-      img.alt = _produtoAtual.nome || '';
+      img.src = _galeriaAtual[_fotoAtivaIdx] || '';
+      img.alt = (_produtoAtual && _produtoAtual.nome) || '';
       modal.classList.remove('hidden');
     }
 
@@ -390,17 +487,29 @@
       crumbCat.href = `index.html?categoria=${encodeURIComponent(cat.id)}#colecao`;
       document.getElementById('pdp-crumb-nome').textContent = produto.nome || 'Peça';
 
-      const imgUrl = AtelierLoja.normalizarUrlImagem(produto.imagem_url);
       const imgEl = document.getElementById('pdp-imagem');
-      imgEl.src = imgUrl;
-      imgEl.alt = produto.nome || 'Peça Eva Leite Atelier';
+      _galeriaAtual = AtelierLoja.obterGaleriaProduto(produto);
+      _fotoAtivaIdx = 0;
+      renderGaleriaPdp();
 
       const catPill = document.getElementById('pdp-categoria-pill');
       catPill.textContent = cat.label;
       catPill.href = `index.html?categoria=${encodeURIComponent(cat.id)}#colecao`;
 
-      document.getElementById('pdp-titulo').textContent = produto.nome || '';
-      document.getElementById('pdp-preco').textContent = AtelierLoja.formatarPreco(produto.preco) || 'Sob consulta';
+      const infoPreco = AtelierLoja.obterPrecosProduto(produto);
+      const pdpPrecoEl = document.getElementById('pdp-preco');
+      if (infoPreco.emPromo) {
+        pdpPrecoEl.innerHTML = `
+          <span class="inline-flex flex-wrap items-baseline gap-2.5">
+            <span class="text-2xl sm:text-3xl font-semibold text-rose-700">${AtelierLoja.escapeHtml(infoPreco.precoAtualFormatado)}</span>
+            ${infoPreco.precoOriginalFormatado ? `<span class="text-base sm:text-lg font-normal text-stone-400 line-through">${AtelierLoja.escapeHtml(infoPreco.precoOriginalFormatado)}</span>` : ''}
+            <span class="px-2.5 py-0.5 rounded-full bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold align-middle">
+              ${infoPreco.descontoPercentagem ? `Em Promoção • -${infoPreco.descontoPercentagem}%` : 'Em Promoção'}
+            </span>
+          </span>`;
+      } else {
+        pdpPrecoEl.textContent = infoPreco.precoAtualFormatado || 'Sob consulta';
+      }
       document.getElementById('pdp-ref').textContent = `Ref. #${idStr}`;
 
       const descTexto = String(produto.descricao || '').trim();
@@ -420,14 +529,77 @@
       AtelierUI.atualizarBotoesFavoritoNaPagina();
 
       document.getElementById('sticky-nome').textContent = produto.nome || '';
-      document.getElementById('sticky-preco').textContent = AtelierLoja.formatarPreco(produto.preco) || '';
+      const stickyPrecoEl = document.getElementById('sticky-preco');
+      if (infoPreco.emPromo) {
+        stickyPrecoEl.innerHTML = `<span class="text-rose-700">${AtelierLoja.escapeHtml(infoPreco.precoAtualFormatado)}</span> <span class="text-stone-400 line-through font-normal text-xs ml-1">${AtelierLoja.escapeHtml(infoPreco.precoOriginalFormatado)}</span>`;
+      } else {
+        stickyPrecoEl.textContent = infoPreco.precoAtualFormatado || '';
+      }
 
       renderCanaisCompra(produto);
+      renderAcessoriosUtilizados(produto);
 
       document.getElementById('pdp-loading').classList.add('hidden');
       document.getElementById('pdp-not-found').classList.add('hidden');
       document.getElementById('pdp-content').classList.remove('hidden');
       document.getElementById('pdp-mobile-sticky').classList.remove('hidden');
+    }
+
+    function renderAcessoriosUtilizados(produto) {
+      const wrap = document.getElementById('pdp-acessorios-wrap');
+      const listaEl = document.getElementById('pdp-acessorios-lista');
+      const countEl = document.getElementById('pdp-acessorios-count');
+      if (!wrap || !listaEl) return;
+
+      const acessorios = AtelierLoja.obterAcessoriosProduto(produto);
+      if (acessorios.length === 0) {
+        wrap.classList.add('hidden');
+        listaEl.innerHTML = '';
+        return;
+      }
+
+      if (countEl) {
+        countEl.textContent = `${acessorios.length} ${acessorios.length === 1 ? 'artigo' : 'artigos'}`;
+      }
+
+      listaEl.innerHTML = acessorios.map(acc => {
+        const ehExterno = acc.tipo === 'externo';
+        const nome = AtelierLoja.escapeHtml(acc.nome);
+        const preco = AtelierLoja.formatarPreco(acc.preco);
+        const precoOrigAcc = acc.emPromo && acc.precoOriginal !== null ? AtelierLoja.formatarPreco(acc.precoOriginal) : '';
+        const precoAccHtml = preco
+          ? (acc.emPromo && precoOrigAcc
+              ? `<p class="text-xs sm:text-sm font-semibold text-rose-700 mt-0.5">${AtelierLoja.escapeHtml(preco)} <span class="text-[11px] font-normal text-stone-400 line-through ml-1">${AtelierLoja.escapeHtml(precoOrigAcc)}</span></p>`
+              : `<p class="text-xs sm:text-sm font-semibold text-stone-700 mt-0.5">${AtelierLoja.escapeHtml(preco)}</p>`)
+          : '';
+        const imgUrl = AtelierLoja.normalizarUrlImagem(acc.imagemUrl);
+        const link = ehExterno
+          ? AtelierLoja.validarUrlHttp(acc.linkUrl)
+          : String(acc.linkUrl || '');
+        const attrsExterno = ehExterno ? ' target="_blank" rel="noopener noreferrer"' : '';
+
+        return `
+          <a href="${AtelierLoja.escapeHtml(link)}"${attrsExterno}
+            class="flex items-center gap-3.5 p-3 rounded-2xl bg-white border border-stone-200/90 hover:border-[#b8933a]/60 hover:shadow-md transition-all group">
+            <div class="w-14 h-[72px] rounded-xl overflow-hidden bg-stone-100 shrink-0">
+              ${imgUrl ? `<img src="${AtelierLoja.escapeHtml(imgUrl)}" alt="${nome}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">` : ''}
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-1.5 mb-0.5">
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider ${ehExterno ? 'bg-stone-100 text-stone-600' : 'bg-[#f3efe7] text-[#8d6d22]'}">
+                  ${ehExterno ? 'Parceiro Externo' : 'No Atelier'}
+                </span>
+              </div>
+              <p class="text-sm font-semibold text-stone-900 truncate group-hover:text-[#b8933a] transition-colors" title="${nome}">${nome}</p>
+              ${precoAccHtml}
+            </div>
+            <span class="shrink-0 px-3 py-1.5 rounded-full bg-stone-100 group-hover:bg-[#171614] group-hover:text-white text-stone-800 text-[11px] font-semibold transition-colors">
+              ${ehExterno ? 'Ver artigo ↗' : 'Ver peça →'}
+            </span>
+          </a>`;
+      }).join('');
+
+      wrap.classList.remove('hidden');
     }
 
     function renderRelacionados(todos, produtoAtual) {
@@ -498,6 +670,8 @@
 
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape') fecharLightbox();
+      else if (e.key === 'ArrowLeft' && _galeriaAtual.length > 1) mudarFotoPdp(-1);
+      else if (e.key === 'ArrowRight' && _galeriaAtual.length > 1) mudarFotoPdp(1);
     });
 
     document.addEventListener('DOMContentLoaded', () => {

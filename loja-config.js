@@ -152,7 +152,10 @@
     const cfg = obterConfigWhatsApp();
     const digits = normalizarNumeroWhatsApp(cfg.numero);
     const nome = String(produto && produto.nome ? produto.nome : 'Peça do Atelier').trim();
-    const preco = formatarPreco(produto && produto.preco);
+    const infoPreco = obterPrecosProduto(produto);
+    const preco = infoPreco.emPromo
+      ? `${infoPreco.precoAtualFormatado} (em promoção; antes ${infoPreco.precoOriginalFormatado})`
+      : infoPreco.precoAtualFormatado;
     const linkPeca = urlCustom || getUrlAbsolutaProduto(produto);
     const linhas = [
       cfg.mensagemPadrao,
@@ -225,6 +228,18 @@
       parsed && parsed.produtoCategorias && typeof parsed.produtoCategorias === 'object'
         ? parsed.produtoCategorias
         : {};
+    const produtoImagensExtras =
+      parsed && parsed.produtoImagensExtras && typeof parsed.produtoImagensExtras === 'object'
+        ? parsed.produtoImagensExtras
+        : {};
+    const produtoAcessorios =
+      parsed && parsed.produtoAcessorios && typeof parsed.produtoAcessorios === 'object'
+        ? parsed.produtoAcessorios
+        : {};
+    const produtoPromos =
+      parsed && parsed.produtoPromos && typeof parsed.produtoPromos === 'object'
+        ? parsed.produtoPromos
+        : {};
 
     if (parsed && parsed.whatsapp && typeof parsed.whatsapp === 'object') {
       _whatsappRemoto = parsed.whatsapp;
@@ -244,14 +259,74 @@
           const auto = classificarCategoriaAutomatica(row);
           categoriaResolvida = catById.get(auto.id) || auto;
         }
+        const rawExtras = Array.isArray(produtoImagensExtras[String(row.id)])
+          ? produtoImagensExtras[String(row.id)]
+          : [];
+        const capaNorm = normalizarUrlImagem(row.imagem_url);
+        const galeria = [];
+        if (capaNorm) galeria.push(capaNorm);
+        rawExtras.forEach(u => {
+          const norm = normalizarUrlImagem(u);
+          if (norm && !galeria.includes(norm)) galeria.push(norm);
+        });
+        const rawPromo = produtoPromos[String(row.id)];
+        const promoResolvida =
+          rawPromo && typeof rawPromo === 'object' && rawPromo.ativo
+            ? { ativo: true, precoPromo: Number(rawPromo.precoPromo) }
+            : { ativo: false, precoPromo: null };
         return {
           ...row,
           _categoriaResolvida: categoriaResolvida,
-          _bloqueado: bloqueadosSet.has(String(row.id))
+          _bloqueado: bloqueadosSet.has(String(row.id)),
+          _imagens: galeria,
+          _promo: promoResolvida
         };
       });
 
     const produtosVisiveis = produtosReais.filter(p => !p._bloqueado);
+    const visiveisPorId = new Map(produtosVisiveis.map(p => [String(p.id), p]));
+
+    produtosReais.forEach(p => {
+      const listaRaw = Array.isArray(produtoAcessorios[String(p.id)])
+        ? produtoAcessorios[String(p.id)]
+        : [];
+      const resolvidos = [];
+      listaRaw.forEach(item => {
+        if (!item || typeof item !== 'object') return;
+        if (item.tipo === 'interno') {
+          const alvo = visiveisPorId.get(String(item.produtoId));
+          if (alvo && String(alvo.id) !== String(p.id)) {
+            const pAlvo = obterPrecosProduto(alvo);
+            resolvidos.push({
+              tipo: 'interno',
+              produtoId: String(alvo.id),
+              nome: alvo.nome || 'Peça do Atelier',
+              preco: pAlvo.precoAtual,
+              precoOriginal: pAlvo.emPromo ? pAlvo.precoOriginal : null,
+              emPromo: pAlvo.emPromo,
+              imagemUrl: normalizarUrlImagem(alvo.imagem_url),
+              linkUrl: getUrlProduto(alvo)
+            });
+          }
+        } else if (item.tipo === 'externo') {
+          const nome = String(item.nome || '').trim();
+          const imgUrl = normalizarUrlImagem(item.imagemUrl || item.imagem_url);
+          const linkUrl = validarUrlHttp(item.linkUrl || item.link_url || item.url);
+          if (nome && imgUrl && linkUrl) {
+            resolvidos.push({
+              tipo: 'externo',
+              nome,
+              preco: item.preco,
+              precoOriginal: null,
+              emPromo: false,
+              imagemUrl: imgUrl,
+              linkUrl
+            });
+          }
+        }
+      });
+      p._acessorios = resolvidos;
+    });
 
     return {
       produtosReais,
@@ -259,8 +334,58 @@
       categorias,
       bloqueadosSet,
       produtoCategorias,
+      produtoImagensExtras,
+      produtoAcessorios,
+      produtoPromos,
       whatsapp: obterConfigWhatsApp()
     };
+  }
+
+  function obterPrecosProduto(produto) {
+    const precoOrig =
+      produto && produto.preco !== null && produto.preco !== undefined && produto.preco !== ''
+        ? Number(produto.preco)
+        : NaN;
+    const origValido = Number.isFinite(precoOrig) ? precoOrig : null;
+    const promo = produto && produto._promo && typeof produto._promo === 'object' ? produto._promo : null;
+    const promoNum =
+      promo && promo.ativo && promo.precoPromo !== null && promo.precoPromo !== undefined && promo.precoPromo !== ''
+        ? Number(promo.precoPromo)
+        : NaN;
+    const emPromo = Boolean(
+      promo &&
+      promo.ativo &&
+      Number.isFinite(promoNum) &&
+      promoNum >= 0 &&
+      (origValido === null || promoNum < origValido)
+    );
+    const precoAtual = emPromo ? promoNum : origValido;
+    let descontoPct = null;
+    if (emPromo && origValido && origValido > 0) {
+      descontoPct = Math.round(((origValido - promoNum) / origValido) * 100);
+    }
+    return {
+      emPromo,
+      precoOriginal: origValido,
+      precoAtual,
+      precoOriginalFormatado: origValido !== null ? formatarPreco(origValido) : '',
+      precoAtualFormatado: precoAtual !== null ? formatarPreco(precoAtual) : '',
+      descontoPercentagem: descontoPct && descontoPct > 0 ? descontoPct : null
+    };
+  }
+
+  function obterGaleriaProduto(produto) {
+    if (!produto) return [];
+    if (Array.isArray(produto._imagens) && produto._imagens.length > 0) {
+      return produto._imagens;
+    }
+    const capa = normalizarUrlImagem(produto.imagem_url);
+    return capa ? [capa] : [];
+  }
+
+  function obterAcessoriosProduto(produto) {
+    if (!produto || !Array.isArray(produto._acessorios)) return [];
+    return produto._acessorios;
   }
 
   async function carregarEstadoLoja(dbClient) {
@@ -335,6 +460,9 @@
     getCategoriasComTodas,
     ehRegistoConfig,
     extrairConfigDeLinhas,
+    obterGaleriaProduto,
+    obterAcessoriosProduto,
+    obterPrecosProduto,
     carregarEstadoLoja,
     getFavoritos,
     isFavorito,
