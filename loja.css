@@ -1,0 +1,162 @@
+:root {
+  --atelier-bg: #faf8f4;
+  --atelier-bg-warm: #f3efe7;
+  --atelier-surface: #ffffff;
+  --atelier-ink: #171614;
+  --atelier-ink-soft: #5f5950;
+  --atelier-gold: #b8933a;
+  --atelier-gold-soft: rgba(184, 147, 58, 0.14);
+  --atelier-border: rgba(23, 22, 20, 0.09);
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--atelier-bg);
+  color: var(--atelier-ink);
+  font-family: var(--font-sans);
+}
+
+body {
+  background-color: var(--atelier-bg);
+  color: var(--atelier-ink);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-display {
+  font-family: var(--font-sans);
+  letter-spacing: -0.025em;
+}
+
+/* Cartões de produto */
+.produto-card {
+  background: var(--atelier-surface);
+  border: 1px solid var(--atelier-border);
+  border-radius: 16px;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease, border-color 0.25s ease;
+}
+
+.produto-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 42px -18px rgba(23, 22, 20, 0.14);
+  border-color: rgba(184, 147, 58, 0.35);
+}
+
+.produto-card-media img {
+  transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.produto-card:hover .produto-card-media img {
+  transform: scale(1.06);
+}
+
+.produto-card .quick-cta {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.28s ease, transform 0.28s ease;
+}
+
+.produto-card:hover .quick-cta {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Filtros e botões de coleção */
+.colecao-pill {
+  border: 1px solid var(--atelier-border);
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--atelier-ink-soft);
+  transition: all 0.2s ease;
+}
+
+.colecao-pill:hover {
+  border-color: var(--atelier-ink);
+  color: var(--atelier-ink);
+}
+
+.colecao-pill.ativo {
+  background: var(--atelier-ink);
+  color: #ffffff;
+  border-color: var(--atelier-ink);
+  box-shadow: 0 8px 20px -10px rgba(23, 22, 20, 0.45);
+}
+
+/* Skeleton shimmer */
+@keyframes atelierShimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(90deg, #efebe3 25%, #f8f5ef 50%, #efebe3 75%);
+  background-size: 800px 100%;
+  animation: atelierShimmer 1.5s infinite linear;
+}
+
+/* Drawers laterais */
+.drawer-root {
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.drawer-root.aberto {
+  pointer-events: auto;
+  opacity: 1;
+}
+
+.drawer-panel-right {
+  transform: translateX(100%);
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.drawer-root.aberto .drawer-panel-right {
+  transform: translateX(0);
+}
+
+.drawer-panel-left {
+  transform: translateX(-100%);
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.drawer-root.aberto .drawer-panel-left {
+  transform: translateX(0);
+}
+
+/* Notificação toast */
+#atelier-toast {
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+#atelier-toast.visivel {
+  opacity: 1;
+  transform: translate(-50%, 0);
+  pointer-events: auto;
+}
+
+#atelier-toast:not(.visivel) {
+  opacity: 0;
+  transform: translate(-50%, 14px);
+  pointer-events: none;
+}
+
+/* Acordeões */
+.atelier-accordion summary {
+  list-style: none;
+}
+
+.atelier-accordion summary::-webkit-details-marker {
+  display: none;
+}
+
+.atelier-accordion[open] .accordion-chevron {
+  transform: rotate(180deg);
+}
+
+.accordion-chevron {
+  transition: transform 0.25s ease;
+}

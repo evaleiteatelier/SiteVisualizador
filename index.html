@@ -2,479 +2,489 @@
 <html lang="pt-PT">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eva Leite Atelier</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eva Leite Atelier — Moda Autoral &amp; Peças Únicas</title>
+  <meta name="description" content="Explore a coleção oficial do Eva Leite Atelier. Peças únicas de moda autoral disponíveis para finalizar com segurança na Vinted ou brevemente por WhatsApp.">
 
-    <!-- Tailwind CSS para o design e responsividade -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        fundo: '#f4f4f6',
-                        marca: '#1a1a1a'
-                    },
-                    fontFamily: {
-                        sans: ['Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Supabase JS Client -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-    <style>
-        /* Pequenos ajustes para animações suaves */
-        .produto-card:hover img {
-            transform: scale(1.05);
-        }
-
-        .produto-card img {
-            transition: transform 0.3s ease;
-        }
-    </style>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="loja.css">
 </head>
 
-<body class="bg-fundo text-marca min-h-screen flex flex-col">
+<body>
+  <div id="loja-header-mount"></div>
 
-    <!-- Cabeçalho com a Logo -->
-    <header
-        class="w-full py-2 md:py-3 flex justify-center items-center shadow-sm bg-fundo/90 sticky top-0 z-50 backdrop-blur-sm relative">
-        <div class="text-center">
-            <!-- Certifique-se de que a imagem está na mesma pasta que o index.html -->
-            <img src="logo.png" alt="Eva Leite Atelier Logo" class="h-12 md:h-16 object-contain mix-blend-multiply">
+  <main class="flex-1">
+    <!-- Hero Minimalista -->
+    <section class="border-b border-stone-200/80 bg-gradient-to-b from-[#f3efe7]/70 to-[#faf8f4]">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16 lg:py-20 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+        <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-stone-200/90 text-[11px] font-semibold uppercase tracking-[0.16em] text-stone-700 shadow-sm">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#b8933a]"></span>
+            <span>Curadoria Autoral &amp; Peças Únicas</span>
+          </div>
+
+          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-[#171614] leading-[1.12]">
+            Peças feitas com alma, cor e identidade única.
+          </h1>
+
+          <p class="text-sm sm:text-base text-stone-600 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+            Descubra a seleção oficial do Eva Leite Atelier. Abra cada criação para ver todos os pormenores, copiar a ligação ou escolher como finalizar a sua compra.
+          </p>
+
+          <div class="flex flex-wrap items-center justify-center lg:justify-start gap-3 pt-1">
+            <a href="#colecao" class="px-6 py-3.5 rounded-full bg-[#171614] text-white text-xs font-semibold uppercase tracking-[0.14em] hover:bg-stone-800 transition-colors shadow-lg shadow-stone-900/10">
+              Explorar Coleção
+            </a>
+            <a href="#como-comprar" class="px-6 py-3.5 rounded-full bg-white border border-stone-300 text-stone-800 text-xs font-semibold uppercase tracking-[0.14em] hover:border-[#171614] transition-colors">
+              Como Comprar
+            </a>
+          </div>
         </div>
-        
-        <!-- Ícone do Instagram -->
-        <a href="https://www.instagram.com/eva_leite_atelier/" target="_blank" rel="noopener noreferrer" 
-           class="absolute right-6 md:right-10 top-1/2 -translate-y-1/2 text-marca hover:text-gray-500 transition-colors p-2" 
-           title="Siga-nos no Instagram">
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
-                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+
+        <!-- Cartão Destaque Dinâmico -->
+        <div class="lg:col-span-5">
+          <div id="hero-spotlight" class="bg-white rounded-2xl border border-stone-200/90 p-4 shadow-xl shadow-stone-900/5 max-w-md mx-auto">
+            <div class="aspect-[4/5] rounded-xl skeleton-shimmer mb-4"></div>
+            <div class="h-4 w-2/3 rounded skeleton-shimmer mb-2"></div>
+            <div class="h-4 w-1/3 rounded skeleton-shimmer"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Faixa de Confiança -->
+    <section class="border-b border-stone-200/80 bg-white/70">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 text-xs sm:text-sm">
+        <div class="flex items-center gap-3">
+          <span class="w-9 h-9 rounded-full bg-[#f3efe7] text-[#b8933a] flex items-center justify-center shrink-0">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m12 3 2.5 5 5.5.8-4 3.9.9 5.5L12 15.6 7.1 18.2l.9-5.5-4-3.9L9.5 8 12 3Z"/></svg>
+          </span>
+          <div>
+            <p class="font-semibold text-stone-900">Edições Limitadas</p>
+            <p class="text-[11px] text-stone-500">Peças autorais exclusivas</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="w-9 h-9 rounded-full bg-[#f3efe7] text-[#171614] flex items-center justify-center shrink-0">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3 4 7v6c0 5 3.4 8.2 8 9 4.6-.8 8-4 8-9V7l-8-4Z"/><path stroke-linecap="round" stroke-linejoin="round" d="m9.5 12.5 1.8 1.8 3.5-3.8"/></svg>
+          </span>
+          <div>
+            <p class="font-semibold text-stone-900">Compra Segura na Vinted</p>
+            <p class="text-[11px] text-stone-500">Envio com seguimento e proteção</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="w-9 h-9 rounded-full bg-[#f3efe7] text-stone-700 flex items-center justify-center shrink-0">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          </span>
+          <div>
+            <p class="font-semibold text-stone-900">Atendimento por WhatsApp</p>
+            <p id="trust-zap-sub" class="text-[11px] text-stone-500">Indisponível de momento</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="w-9 h-9 rounded-full bg-[#f3efe7] text-stone-700 flex items-center justify-center shrink-0">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4m0-11-6.8 4"/></svg>
+          </span>
+          <div>
+            <p class="font-semibold text-stone-900">Ligação Direta por Peça</p>
+            <p class="text-[11px] text-stone-500">Fácil de guardar e partilhar</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Catálogo Principal -->
+    <section id="colecao" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
+        <div>
+          <span class="text-[11px] uppercase tracking-[0.2em] text-[#b8933a] font-semibold">Catálogo Oficial</span>
+          <h2 class="text-2xl sm:text-3xl font-semibold tracking-tight text-stone-950 mt-1">A Nossa Coleção</h2>
+          <p class="text-sm text-stone-500 mt-1">Selecione uma peça para abrir a página dedicada e escolher onde finalizar a compra.</p>
+        </div>
+        <p id="resumo-contagem" class="text-xs font-medium text-stone-500"></p>
+      </div>
+
+      <!-- Barra de Filtros, Pesquisa e Ordenação -->
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-6 mb-8 border-b border-stone-200/80">
+        <div id="filtros-colecao" class="flex items-center gap-2 overflow-x-auto pb-1"></div>
+
+        <div class="flex flex-wrap sm:flex-nowrap items-center gap-2.5">
+          <div class="relative flex-1 sm:w-64">
+            <input type="search" id="filtro-pesquisa" placeholder="Pesquisar peça..."
+              oninput="atualizarPesquisaCatalogo(this.value)"
+              class="w-full pl-9 pr-4 py-2 rounded-full bg-white border border-stone-300 text-xs sm:text-sm text-stone-900 focus:outline-none focus:border-[#171614]">
+            <svg class="w-4 h-4 text-stone-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="7"></circle>
+              <path stroke-linecap="round" stroke-linejoin="round" d="m20 20-3.5-3.5"></path>
             </svg>
+          </div>
+
+          <select id="filtro-ordem" onchange="atualizarOrdemCatalogo(this.value)" aria-label="Ordenar peças"
+            class="px-4 py-2 rounded-full bg-white border border-stone-300 text-xs sm:text-sm text-stone-800 focus:outline-none focus:border-[#171614] cursor-pointer">
+            <option value="recentes">Mais recentes</option>
+            <option value="menor-preco">Menor preço</option>
+            <option value="maior-preco">Maior preço</option>
+            <option value="nome-az">Nome (A – Z)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Skeleton Loading -->
+      <div id="loading" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
+        <div class="bg-white rounded-2xl p-3 border border-stone-200/70"><div class="aspect-[3/4] rounded-xl skeleton-shimmer mb-3"></div><div class="h-4 w-3/4 rounded skeleton-shimmer mb-2"></div><div class="h-4 w-1/3 rounded skeleton-shimmer"></div></div>
+        <div class="bg-white rounded-2xl p-3 border border-stone-200/70"><div class="aspect-[3/4] rounded-xl skeleton-shimmer mb-3"></div><div class="h-4 w-3/4 rounded skeleton-shimmer mb-2"></div><div class="h-4 w-1/3 rounded skeleton-shimmer"></div></div>
+        <div class="bg-white rounded-2xl p-3 border border-stone-200/70"><div class="aspect-[3/4] rounded-xl skeleton-shimmer mb-3"></div><div class="h-4 w-3/4 rounded skeleton-shimmer mb-2"></div><div class="h-4 w-1/3 rounded skeleton-shimmer"></div></div>
+        <div class="bg-white rounded-2xl p-3 border border-stone-200/70"><div class="aspect-[3/4] rounded-xl skeleton-shimmer mb-3"></div><div class="h-4 w-3/4 rounded skeleton-shimmer mb-2"></div><div class="h-4 w-1/3 rounded skeleton-shimmer"></div></div>
+      </div>
+
+      <!-- Mensagem de Erro -->
+      <div id="error-message" class="hidden py-12 text-center bg-white rounded-2xl border border-rose-200 p-6 max-w-lg mx-auto">
+        <p class="text-xl font-semibold text-stone-900 mb-2">Não foi possível carregar a coleção</p>
+        <p id="error-details" class="text-xs text-rose-700 bg-rose-50 p-3 rounded-xl border border-rose-200 break-words mb-5"></p>
+        <button type="button" onclick="carregarProdutos()"
+          class="px-6 py-2.5 rounded-full bg-[#171614] text-white text-xs font-semibold uppercase tracking-wider hover:bg-stone-800 transition-colors">
+          Tentar Novamente
+        </button>
+      </div>
+
+      <!-- Estado Filtro Vazio -->
+      <div id="empty-filter-state" class="hidden py-16 text-center bg-white rounded-2xl border border-stone-200/80 px-4">
+        <p class="text-xl font-semibold text-stone-900 mb-1">Nenhuma peça encontrada</p>
+        <p class="text-sm text-stone-500 mb-5">Experimente limpar os filtros ou pesquisar por outro termo.</p>
+        <button type="button" onclick="limparFiltrosCatalogo()"
+          class="px-6 py-2.5 rounded-full bg-[#171614] text-white text-xs font-semibold uppercase tracking-wider hover:bg-stone-800 transition-colors">
+          Ver Toda a Coleção
+        </button>
+      </div>
+
+      <!-- Grelha de Produtos -->
+      <div id="grelha-produtos" class="hidden grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8"></div>
+    </section>
+
+    <!-- Como Comprar / Canais de Venda -->
+    <section id="como-comprar" class="border-t border-stone-200/80 bg-[#f3efe7]/65 py-14 md:py-20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-10">
+          <span class="text-[11px] uppercase tracking-[0.2em] text-[#b8933a] font-semibold">Finalização Flexível</span>
+          <h2 class="text-2xl sm:text-3xl font-semibold tracking-tight text-stone-950 mt-1">Escolha Como Finalizar a Compra</h2>
+          <p class="text-sm text-stone-600 mt-2">Na página de cada peça pode escolher com total transparência o canal de compra que preferir.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+          <div class="bg-white rounded-2xl p-6 sm:p-7 border border-stone-200/90 shadow-sm flex flex-col">
+            <div class="flex items-center justify-between gap-2 mb-4">
+              <span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[11px] font-semibold uppercase tracking-wider">Disponível Agora</span>
+              <span class="text-xs text-stone-400">Canal Oficial</span>
+            </div>
+            <h3 class="text-xl font-semibold tracking-tight text-stone-900 mb-2">Comprar pela Vinted</h3>
+            <p class="text-sm text-stone-600 leading-relaxed">
+              Ideal para pagar com cartão ou saldo Vinted com proteção ao comprador, etiquetas automáticas e seguimento de envio passo a passo.
+            </p>
+          </div>
+
+          <div id="card-canal-whatsapp-home" class="bg-white rounded-2xl p-6 sm:p-7 border border-stone-200/90 shadow-sm flex flex-col"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sobre o Atelier -->
+    <section id="atelier" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 md:py-16">
+      <div class="bg-[#171614] text-[#f5f0e6] rounded-3xl p-8 sm:p-12 lg:p-14 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div class="lg:col-span-8 space-y-4">
+          <span class="text-[11px] uppercase tracking-[0.22em] text-[#d5b363] font-semibold">Eva Leite Atelier</span>
+          <h2 class="text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight leading-tight">
+            Moda autoral que valoriza cada silhueta e conta uma história.
+          </h2>
+          <p class="text-sm sm:text-base text-stone-300 leading-relaxed max-w-2xl">
+            Cada vestido, blazer ou acessório nasce de uma escolha cuidada de tecidos, padrões vibrantes e modelagem pensada ao pormenor. Acompanhe os bastidores e as novas criações no nosso Instagram oficial.
+          </p>
+        </div>
+        <div class="lg:col-span-4 flex lg:justify-end">
+          <a href="https://www.instagram.com/eva_leite_atelier/" target="_blank" rel="noopener noreferrer"
+            class="inline-flex items-center gap-3 px-6 py-3.5 rounded-full bg-white text-[#171614] text-xs font-semibold uppercase tracking-[0.14em] hover:bg-[#f3efe7] transition-colors">
+            <span>Seguir @eva_leite_atelier</span>
+            <span>↗</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="loja-footer-mount"></div>
+  <div id="loja-overlays-mount"></div>
+
+  <script src="loja-config.js"></script>
+  <script src="loja-ui.js"></script>
+  <script>
+    let _todosProdutos = [];
+    let _categoriaAtiva = 'todas';
+    let _termoPesquisa = '';
+    let _ordemAtiva = 'recentes';
+    let _spotlightIdx = 0;
+
+    function inicializarParametrosUrl() {
+      const params = new URLSearchParams(window.location.search);
+      const q = params.get('q');
+      const cat = params.get('categoria');
+      if (q) {
+        _termoPesquisa = q.trim();
+        const input = document.getElementById('filtro-pesquisa');
+        if (input) input.value = _termoPesquisa;
+      }
+      if (cat) {
+        _categoriaAtiva = cat;
+      }
+    }
+
+    function atualizarEstadoWhatsAppHome() {
+      const ativo = AtelierLoja.isWhatsAppDisponivel();
+      const subTrust = document.getElementById('trust-zap-sub');
+      if (subTrust) {
+        subTrust.textContent = ativo ? 'Atendimento direto ativo' : 'Indisponível de momento';
+      }
+
+      const card = document.getElementById('card-canal-whatsapp-home');
+      if (!card) return;
+
+      if (ativo) {
+        card.innerHTML = `
+          <div class="flex items-center justify-between gap-2 mb-4">
+            <span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-[11px] font-semibold uppercase tracking-wider">Disponível Agora</span>
+            <span class="text-xs text-stone-400">Atendimento Direto</span>
+          </div>
+          <h3 class="text-xl font-semibold tracking-tight text-stone-900 mb-2">Finalizar por WhatsApp</h3>
+          <p class="text-sm text-stone-600 leading-relaxed">
+            Fale diretamente com o atelier já com os dados da peça preenchidos na mensagem para esclarecer dúvidas sobre medidas ou combinar a compra.
+          </p>`;
+      } else {
+        card.innerHTML = `
+          <div class="flex items-center justify-between gap-2 mb-4">
+            <span class="px-3 py-1 rounded-full bg-amber-100 text-amber-900 text-[11px] font-semibold uppercase tracking-wider">Indisponível de momento</span>
+            <span class="text-xs text-stone-400">Em preparação</span>
+          </div>
+          <h3 class="text-xl font-semibold tracking-tight text-stone-900 mb-2">Finalizar por WhatsApp</h3>
+          <p class="text-sm text-stone-600 leading-relaxed">
+            O nosso atendimento direto por WhatsApp estará disponível brevemente, com envio automático dos dados da peça. Até lá, finalize pela Vinted ou fale connosco no Instagram.
+          </p>`;
+      }
+    }
+
+    function renderSpotlight(lista) {
+      const el = document.getElementById('hero-spotlight');
+      if (!el) return;
+      if (!lista || lista.length === 0) {
+        el.innerHTML = `
+          <div class="aspect-[4/5] rounded-xl bg-stone-100 flex flex-col items-center justify-center p-6 text-center text-stone-500">
+            <img src="logo.png" alt="Eva Leite Atelier" class="h-14 mb-4 mix-blend-multiply opacity-75">
+            <p class="text-sm">Novas peças exclusivas brevemente disponíveis.</p>
+          </div>`;
+        return;
+      }
+
+      const destaques = lista.slice(0, Math.min(3, lista.length));
+      if (_spotlightIdx >= destaques.length) _spotlightIdx = 0;
+      const item = destaques[_spotlightIdx];
+      const imgUrl = AtelierLoja.normalizarUrlImagem(item.imagem_url);
+      const urlPeca = AtelierLoja.getUrlProduto(item);
+      const preco = AtelierLoja.formatarPreco(item.preco);
+
+      const dotsHtml = destaques.length > 1
+        ? `<div class="flex items-center gap-1.5">
+            ${destaques.map((_, i) => `
+              <button type="button" onclick="mudarSpotlight(${i})" aria-label="Destaque ${i + 1}"
+                class="h-1.5 rounded-full transition-all ${i === _spotlightIdx ? 'w-5 bg-[#171614]' : 'w-1.5 bg-stone-300 hover:bg-stone-500'}"></button>
+            `).join('')}
+           </div>`
+        : '';
+
+      el.innerHTML = `
+        <a href="${urlPeca}" class="block group">
+          <div class="relative aspect-[4/5] rounded-xl overflow-hidden bg-stone-100 mb-4">
+            ${imgUrl ? `<img src="${AtelierLoja.escapeHtml(imgUrl)}" alt="${AtelierLoja.escapeHtml(item.nome)}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">` : ''}
+            <span class="absolute top-3 left-3 px-3 py-1 rounded-full bg-white/95 text-[#171614] text-[10px] font-semibold uppercase tracking-widest shadow-sm">
+              Peça em Destaque
+            </span>
+          </div>
         </a>
-    </header>
-
-    <!-- Conteúdo Principal -->
-    <main class="flex-grow container mx-auto px-4 py-8 max-w-6xl">
-
-        <div class="mb-8 text-center">
-            <h1 class="text-2xl font-light tracking-widest uppercase">A nossa coleção</h1>
-            <p class="text-gray-500 mt-2">Clique no produto para comprar diretamente na Vinted.</p>
+        <div class="flex items-start justify-between gap-3">
+          <div class="min-w-0">
+            <a href="${urlPeca}" class="block text-lg font-semibold text-stone-900 truncate hover:text-[#b8933a] transition-colors">
+              ${AtelierLoja.escapeHtml(item.nome)}
+            </a>
+            <p class="text-sm font-semibold text-stone-700 mt-0.5">${AtelierLoja.escapeHtml(preco)}</p>
+          </div>
+          <a href="${urlPeca}" class="shrink-0 px-4 py-2 rounded-full bg-[#171614] text-white text-xs font-medium hover:bg-stone-800 transition-colors">
+            Ver Peça →
+          </a>
         </div>
+        ${destaques.length > 1 ? `<div class="mt-3 pt-3 border-t border-stone-100 flex items-center justify-between">${dotsHtml}<span class="text-[11px] text-stone-400">Novidades do Atelier</span></div>` : ''}
+      `;
+    }
 
-        <!-- Estado de Carregamento -->
-        <div id="loading" class="flex justify-center items-center py-20">
-            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-marca"></div>
-        </div>
+    function mudarSpotlight(idx) {
+      _spotlightIdx = idx;
+      renderSpotlight(_todosProdutos);
+    }
 
-        <!-- Mensagem de Erro (escondida por defeito) -->
-        <div id="error-message" class="hidden py-10">
-            <div class="flex flex-col items-center text-center text-red-500">
-                <p class="text-xl font-semibold mb-2">Ocorreu um erro ao carregar os produtos.</p>
-                <p id="error-details"
-                    class="bg-red-50 p-4 rounded text-sm text-red-800 border border-red-200 mt-4 max-w-lg w-full break-words">
-                </p>
-                <button onclick="carregarProdutos()"
-                    class="mt-6 px-4 py-2 bg-red-100 text-red-700 rounded hover:bg-red-200 transition-colors">Tentar
-                    Novamente</button>
-            </div>
-        </div>
+    function renderFiltrosColecao() {
+      const container = document.getElementById('filtros-colecao');
+      if (!container) return;
 
-        <!-- Grelha de Produtos -->
-        <div id="grelha-produtos" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 hidden">
-            <!-- Os produtos serão injetados aqui via JavaScript -->
-        </div>
+      const categorias = AtelierLoja.getCategoriasComTodas();
+      if (!categorias.some(c => c.id === _categoriaAtiva)) {
+        _categoriaAtiva = 'todas';
+      }
 
-    </main>
+      const contagens = { todas: _todosProdutos.length };
+      categorias.forEach(c => {
+        if (c.id !== 'todas') contagens[c.id] = 0;
+      });
 
-    <!-- Rodapé -->
-    <footer class="w-full py-6 text-center text-sm text-gray-500 mt-auto relative">
-        <p>&copy; <span id="ano-atual"></span> Eva Leite Atelier. <span id="btn-admin" class="cursor-pointer" onclick="abrirModalSenha()">Todos</span> os direitos reservados.</p>
-    </footer>
+      _todosProdutos.forEach(p => {
+        const cat = AtelierLoja.classificarCategoria(p);
+        contagens[cat.id] = (contagens[cat.id] || 0) + 1;
+      });
 
-    <!-- ========================================= -->
-    <!-- MODAIS DE ADMINISTRAÇÃO -->
-    <!-- ========================================= -->
-    
-    <!-- Modal de Senha -->
-    <div id="modal-senha" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-lg p-6 w-full max-w-sm">
-            <h3 class="text-xl font-semibold mb-4 text-gray-900">Acesso Reservado</h3>
-            <p class="text-sm text-gray-500 mb-4">Insira a palavra-passe para aceder à administração.</p>
-            <input type="password" id="input-senha" class="w-full p-2 border rounded mb-4 focus:ring-marca focus:border-marca outline-none" placeholder="Palavra-passe">
-            <div class="flex justify-end gap-2">
-                <button onclick="fecharModal('modal-senha')" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded transition-colors">Cancelar</button>
-                <button onclick="verificarSenha()" class="px-4 py-2 bg-marca text-white rounded hover:bg-gray-800 transition-colors">Entrar</button>
-            </div>
-        </div>
-    </div>
+      container.innerHTML = categorias.map(cat => {
+        const qtd = contagens[cat.id] || 0;
+        const ativo = _categoriaAtiva === cat.id;
+        return `
+          <button type="button" onclick="selecionarCategoria('${AtelierLoja.escapeHtml(cat.id)}')"
+            class="colecao-pill ${ativo ? 'ativo' : ''} px-4 py-2 rounded-full text-xs font-medium whitespace-nowrap flex items-center gap-1.5">
+            <span>${AtelierLoja.escapeHtml(cat.label)}</span>
+            <span class="opacity-70 text-[11px]">(${qtd})</span>
+          </button>`;
+      }).join('');
+    }
 
-    <!-- Modal Escolha Admin -->
-    <div id="modal-admin-escolha" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-lg p-6 w-full max-w-sm text-center">
-            <h3 class="text-xl font-semibold mb-6 text-gray-900">Administração</h3>
-            <div class="flex flex-col gap-3">
-                <button onclick="abrirModal('modal-adicionar'); fecharModal('modal-admin-escolha')" class="px-4 py-3 bg-marca text-white rounded hover:bg-gray-800 transition-colors">Adicionar Produto</button>
-                <button onclick="abrirModalExcluir()" class="px-4 py-3 border border-red-500 text-red-500 rounded hover:bg-red-50 transition-colors">Excluir Produto</button>
-                <button onclick="fecharModal('modal-admin-escolha')" class="mt-4 px-4 py-2 text-gray-600 hover:bg-gray-100 rounded transition-colors">Sair</button>
-            </div>
-        </div>
-    </div>
+    function selecionarCategoria(catId) {
+      _categoriaAtiva = catId;
+      renderFiltrosColecao();
+      aplicarFiltrosERenderizar();
+    }
 
-    <!-- Modal Adicionar Produto -->
-    <div id="modal-adicionar" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-lg p-6 w-full max-w-lg max-h-[90vh] overflow-y-auto">
-            <h3 class="text-xl font-semibold mb-4 text-gray-900">Novo Produto</h3>
-            <form id="form-produto" onsubmit="salvarProduto(event)" class="flex flex-col gap-4 text-left">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Nome do Produto *</label>
-                    <input type="text" id="add-nome" required class="w-full mt-1 p-2 border rounded text-gray-900 focus:ring-marca focus:border-marca outline-none">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Descrição</label>
-                    <textarea id="add-desc" rows="3" class="w-full mt-1 p-2 border rounded text-gray-900 focus:ring-marca focus:border-marca outline-none"></textarea>
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Preço (€) *</label>
-                    <input type="number" id="add-preco" step="0.01" required class="w-full mt-1 p-2 border rounded text-gray-900 focus:ring-marca focus:border-marca outline-none">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Link da Vinted *</label>
-                    <input type="url" id="add-vinted" required class="w-full mt-1 p-2 border rounded text-gray-900 focus:ring-marca focus:border-marca outline-none">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Imagem (Ficheiro) *</label>
-                    <input type="file" id="add-imagem" accept="image/*" required class="w-full mt-1 p-2 border rounded text-gray-800">
-                    <p class="text-xs text-gray-500 mt-1">A imagem será publicamente acessível na loja.</p>
-                </div>
-                
-                <div id="add-loading" class="hidden text-center text-sm text-blue-600 my-2">A guardar no sistema... Pode demorar alguns segundos.</div>
-                <div id="add-error" class="hidden text-center text-sm text-red-600 my-2 bg-red-50 p-2 rounded"></div>
-                
-                <div class="flex justify-end gap-2 mt-4 pt-4 border-t">
-                    <button type="button" onclick="fecharModal('modal-adicionar')" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded transition-colors">Cancelar</button>
-                    <button type="submit" id="btn-guardar-produto" class="px-4 py-2 bg-marca text-white rounded hover:bg-gray-800 transition-colors">Publicar Produto</button>
-                </div>
-            </form>
-        </div>
-    </div>
+    function atualizarPesquisaCatalogo(valor) {
+      _termoPesquisa = String(valor || '').trim();
+      const headerInput = document.getElementById('header-search-input');
+      if (headerInput && headerInput.value !== valor) headerInput.value = valor;
+      const inlineInput = document.getElementById('filtro-pesquisa');
+      if (inlineInput && inlineInput.value !== valor) inlineInput.value = valor;
+      aplicarFiltrosERenderizar();
+    }
 
-    <!-- Modal Excluir Produto -->
-    <div id="modal-excluir" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-lg p-6 w-full max-w-2xl max-h-[90vh] flex flex-col">
-            <h3 class="text-xl font-semibold mb-4 text-gray-900">Excluir Produtos</h3>
-            
-            <div id="lista-excluir-loading" class="flex justify-center my-4 hidden">
-                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-marca"></div>
-            </div>
-            
-            <div id="lista-excluir" class="flex-grow overflow-y-auto mb-4 border rounded p-2 flex flex-col gap-2 relative max-h-80 bg-gray-50">
-                <!-- Lista injetada via JS -->
-            </div>
-            
-            <div id="del-loading" class="hidden text-center text-sm text-red-600 my-2">A apagar...</div>
-            <div id="del-error" class="hidden text-center text-sm text-red-600 my-2 bg-red-50 p-2 rounded"></div>
+    function atualizarOrdemCatalogo(valor) {
+      _ordemAtiva = valor;
+      aplicarFiltrosERenderizar();
+    }
 
-            <div class="flex justify-between items-center mt-auto pt-4 border-t">
-                <span class="text-sm text-gray-500"><span id="count-selecionados" class="font-bold text-marca">0</span> selecionado(s)</span>
-                <div class="flex gap-2">
-                    <button onclick="fecharModal('modal-excluir')" class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded transition-colors">Cancelar</button>
-                    <button onclick="apagarSelecionados()" id="btn-apagar" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors" disabled>Apagar Selecionados</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    function limparFiltrosCatalogo() {
+      _categoriaAtiva = 'todas';
+      _termoPesquisa = '';
+      _ordemAtiva = 'recentes';
+      const inlineInput = document.getElementById('filtro-pesquisa');
+      const ordemSelect = document.getElementById('filtro-ordem');
+      if (inlineInput) inlineInput.value = '';
+      if (ordemSelect) ordemSelect.value = 'recentes';
+      renderFiltrosColecao();
+      aplicarFiltrosERenderizar();
+    }
 
-    <!-- Lógica JavaScript / Supabase -->
-    <script>
-        // Configuração Global Supabase
-        const supabaseUrl = 'https://bqjqwuphjvbmxjfcezos.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxanF3dXBoanZibXhqZmNlem9zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwMTI1NjQsImV4cCI6MjA4OTU4ODU2NH0.manlyhsYXxUTK-llwa174wmhQ0HSVtuHTK387jiEMNk';
-        
-        let supabaseClient = null;
-        if (typeof window.supabase !== 'undefined') {
-            supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+    function aplicarFiltrosERenderizar() {
+      const grelhaEl = document.getElementById('grelha-produtos');
+      const emptyEl = document.getElementById('empty-filter-state');
+      const resumoEl = document.getElementById('resumo-contagem');
+
+      let filtrados = _todosProdutos.filter(p => {
+        if (_categoriaAtiva !== 'todas') {
+          const cat = AtelierLoja.classificarCategoria(p);
+          if (cat.id !== _categoriaAtiva) return false;
         }
-
-        // Atualizar ano do rodapé
-        document.getElementById('ano-atual').textContent = new Date().getFullYear();
-
-        // =========================================
-        // 1. CARREGAR PRODUTOS (LOJA PRINCIPAL)
-        // =========================================
-        async function carregarProdutos() {
-            const loadingEl = document.getElementById('loading');
-            const errorEl = document.getElementById('error-message');
-            const grelhaEl = document.getElementById('grelha-produtos');
-
-            errorEl.classList.add('hidden');
-            loadingEl.classList.remove('hidden');
-            grelhaEl.classList.add('hidden');
-            grelhaEl.innerHTML = '';
-
-            try {
-                if (!supabaseClient) throw new Error("A biblioteca do Supabase não carregou. Verifique a sua ligação.");
-
-                const { data: produtos, error } = await supabaseClient
-                    .from('produtos')
-                    .select('*')
-                    .order('created_at', { ascending: false });
-
-                if (error) throw error;
-
-                loadingEl.classList.add('hidden');
-
-                if (produtos && produtos.length > 0) {
-                    grelhaEl.classList.remove('hidden');
-
-                    produtos.forEach(produto => {
-                        const precoFormatado = produto.preco ?
-                            new Intl.NumberFormat('pt-PT', { style: 'currency', currency: 'EUR' }).format(produto.preco) : '';
-
-                        const cardHTML = `
-                            <div class="produto-card bg-white p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col h-full border border-gray-100">
-                                <a href="${produto.vinted_url}" target="_blank" rel="noopener noreferrer" class="block overflow-hidden rounded mb-4 aspect-[3/4] bg-gray-50 relative group">
-                                    <img src="${produto.imagem_url}" alt="${produto.nome}" class="w-full h-full object-cover">
-                                    <div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors"></div>
-                                </a>
-                                
-                                <div class="flex-grow flex flex-col">
-                                    <h2 class="text-lg font-medium text-gray-900 mb-1 truncate" title="${produto.nome}">${produto.nome}</h2>
-                                    ${produto.descricao ? `<p class="text-sm text-gray-500 mb-4 line-clamp-2">${produto.descricao}</p>` : ''}
-                                    
-                                    <div class="mt-auto flex items-center justify-between pt-4">
-                                        <span class="font-semibold text-lg">${precoFormatado}</span>
-                                        <a href="${produto.vinted_url}" target="_blank" rel="noopener noreferrer" 
-                                           class="bg-marca text-white px-4 py-2 text-sm uppercase tracking-wider rounded hover:bg-gray-800 transition-colors">
-                                            Ver na Vinted
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                        grelhaEl.innerHTML += cardHTML;
-                    });
-                } else {
-                    grelhaEl.classList.remove('hidden');
-                    grelhaEl.innerHTML = `
-                        <div class="col-span-full text-center py-10 text-gray-500">
-                            Neste momento não temos produtos disponíveis. Volte em breve!
-                        </div>
-                    `;
-                    grelhaEl.classList.remove('grid', 'grid-cols-1', 'sm:grid-cols-2', 'md:grid-cols-3', 'lg:grid-cols-4');
-                }
-            } catch (error) {
-                console.error('Erro ao buscar produtos:', error);
-                loadingEl.classList.add('hidden');
-                errorEl.classList.remove('hidden');
-                document.getElementById('error-details').textContent = 'Motivo: ' + (error.message || JSON.stringify(error));
-            }
+        if (_termoPesquisa) {
+          const q = _termoPesquisa.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+          const alvo = `${p.nome || ''} ${p.descricao || ''}`
+            .normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+          if (!alvo.includes(q)) return false;
         }
+        return true;
+      });
 
-        document.addEventListener('DOMContentLoaded', carregarProdutos);
+      if (_ordemAtiva === 'menor-preco') {
+        filtrados = [...filtrados].sort((a, b) => (Number(a.preco) || 0) - (Number(b.preco) || 0));
+      } else if (_ordemAtiva === 'maior-preco') {
+        filtrados = [...filtrados].sort((a, b) => (Number(b.preco) || 0) - (Number(a.preco) || 0));
+      } else if (_ordemAtiva === 'nome-az') {
+        filtrados = [...filtrados].sort((a, b) => String(a.nome || '').localeCompare(String(b.nome || ''), 'pt'));
+      }
 
-        // =========================================
-        // 2. ADMINISTRAÇÃO DOS PRODUTOS
-        // =========================================
-        const SENHA_ADMIN = "evaadmin"; // Palavra-passe da administração
-        
-        function abrirModal(id) { document.getElementById(id).classList.remove('hidden'); }
-        function fecharModal(id) { document.getElementById(id).classList.add('hidden'); }
+      if (resumoEl) {
+        resumoEl.textContent = _todosProdutos.length > 0
+          ? `A mostrar ${filtrados.length} de ${_todosProdutos.length} peças`
+          : '';
+      }
 
-        function abrirModalSenha() {
-            document.getElementById('input-senha').value = '';
-            abrirModal('modal-senha');
-            setTimeout(() => document.getElementById('input-senha').focus(), 100);
-        }
+      if (filtrados.length === 0) {
+        grelhaEl.classList.add('hidden');
+        emptyEl.classList.remove('hidden');
+        return;
+      }
 
-        function verificarSenha() {
-            const input = document.getElementById('input-senha').value;
-            if (input === SENHA_ADMIN) {
-                fecharModal('modal-senha');
-                abrirModal('modal-admin-escolha');
-            } else {
-                alert('Palavra-passe incorreta!');
-            }
-        }
+      emptyEl.classList.add('hidden');
+      grelhaEl.classList.remove('hidden');
+      const mostrarNovo = _ordemAtiva === 'recentes' && _categoriaAtiva === 'todas' && !_termoPesquisa;
+      grelhaEl.innerHTML = filtrados
+        .map((p, idx) => AtelierUI.renderCardProduto(p, idx, { mostrarBadgeNovo: mostrarNovo }))
+        .join('');
+    }
 
-        // Permitir usar Enter para a password
-        document.getElementById('input-senha').addEventListener('keypress', function(e) {
-            if(e.key === 'Enter') verificarSenha();
-        });
+    async function carregarProdutos() {
+      const loadingEl = document.getElementById('loading');
+      const errorEl = document.getElementById('error-message');
+      const grelhaEl = document.getElementById('grelha-produtos');
+      const emptyEl = document.getElementById('empty-filter-state');
 
-        async function salvarProduto(event) {
-            event.preventDefault();
-            const btn = document.getElementById('btn-guardar-produto');
-            const loading = document.getElementById('add-loading');
-            const errorEl = document.getElementById('add-error');
-            
-            btn.disabled = true;
-            loading.classList.remove('hidden');
-            errorEl.classList.add('hidden');
-            
-            try {
-                const nome = document.getElementById('add-nome').value;
-                const desc = document.getElementById('add-desc').value;
-                const preco = parseFloat(document.getElementById('add-preco').value);
-                const vinted = document.getElementById('add-vinted').value;
-                const fileInput = document.getElementById('add-imagem');
-                const file = fileInput.files[0];
-                
-                if (!file) throw new Error("A imagem é obrigatória.");
-                
-                // 2.1 Upload da Imagem para o bucket 'produtos-imagens'
-                const fileExt = file.name.split('.').pop();
-                const fileName = `produto_${Date.now()}.${fileExt}`;
-                
-                const { error: uploadError } = await supabaseClient.storage
-                    .from('produtos-imagens')
-                    .upload(fileName, file);
-                    
-                if (uploadError) throw new Error("Erro de Upload (certifique-se que o bucket público 'produtos-imagens' existe no supabase): " + uploadError.message);
-                
-                // 2.2 Obter URL Público
-                const { data: publicUrlData } = supabaseClient.storage
-                    .from('produtos-imagens')
-                    .getPublicUrl(fileName);
-                    
-                const imagemUrl = publicUrlData.publicUrl;
-                
-                // 2.3 Gravar Produto na Base de Dados
-                const { error: insertError } = await supabaseClient
-                    .from('produtos')
-                    .insert([{
-                        nome: nome,
-                        descricao: desc,
-                        preco: preco,
-                        vinted_url: vinted,
-                        imagem_url: imagemUrl
-                    }]);
-                    
-                if (insertError) throw new Error("Erro na Base de Dados: " + insertError.message);
-                
-                alert('Produto guardado e publicado com sucesso!');
-                fecharModal('modal-adicionar');
-                document.getElementById('form-produto').reset();
-                carregarProdutos();
-                
-            } catch (err) {
-                errorEl.textContent = err.message;
-                errorEl.classList.remove('hidden');
-            } finally {
-                btn.disabled = false;
-                loading.classList.add('hidden');
-            }
-        }
+      errorEl.classList.add('hidden');
+      emptyEl.classList.add('hidden');
+      loadingEl.classList.remove('hidden');
+      grelhaEl.classList.add('hidden');
 
-        let produtosParaExcluir = [];
+      try {
+        const estado = await AtelierLoja.carregarEstadoLoja();
+        _todosProdutos = estado.produtosVisiveis;
+        AtelierUI.registrarProdutos(_todosProdutos);
+        AtelierUI.atualizarEstadoCanaisShell();
+        AtelierUI.atualizarCategoriasNavegacao();
+        atualizarEstadoWhatsAppHome();
 
-        async function abrirModalExcluir() {
-            fecharModal('modal-admin-escolha');
-            abrirModal('modal-excluir');
-            atualizarBotaoApagar();
-            
-            const listaEl = document.getElementById('lista-excluir');
-            const loading = document.getElementById('lista-excluir-loading');
-            
-            listaEl.innerHTML = '';
-            loading.classList.remove('hidden');
-            produtosParaExcluir = [];
-            
-            try {
-                const { data: produtos, error } = await supabaseClient
-                    .from('produtos')
-                    .select('id, nome, preco, imagem_url')
-                    .order('created_at', { ascending: false });
-                    
-                if (error) throw error;
-                
-                if (produtos.length === 0) {
-                    listaEl.innerHTML = '<p class="text-center text-gray-500 py-8">Não existem produtos para apagar.</p>';
-                } else {
-                    produtos.forEach(p => {
-                        const div = document.createElement('div');
-                        div.className = 'flex items-center gap-4 p-3 bg-white border rounded shadow-sm hover:shadow-md transition-shadow cursor-pointer';
-                        // Clicar em toda a row permite selecionar
-                        div.onclick = (e) => {
-                            if(e.target.tagName !== 'INPUT') {
-                                const checkbox = div.querySelector('input');
-                                checkbox.checked = !checkbox.checked;
-                                toggleExcluir(checkbox);
-                            }
-                        };
-                        div.innerHTML = `
-                            <input type="checkbox" class="w-5 h-5 cursor-pointer rounded border-gray-300 mx-2 text-marca focus:ring-marca" value="${p.id}" onchange="toggleExcluir(this)">
-                            <img src="${p.imagem_url}" class="w-16 h-16 object-cover rounded shadow-sm bg-gray-100">
-                            <div class="flex-grow min-w-0">
-                                <p class="font-medium text-gray-900 truncate">${p.nome}</p>
-                                <p class="text-sm text-gray-500">${p.preco} €</p>
-                            </div>
-                        `;
-                        listaEl.appendChild(div);
-                    });
-                }
-            } catch (err) {
-                listaEl.innerHTML = `<p class="text-red-500 p-2 text-center text-sm">Erro ao buscar: ${err.message}</p>`;
-            } finally {
-                loading.classList.add('hidden');
-            }
-        }
+        loadingEl.classList.add('hidden');
+        renderSpotlight(_todosProdutos);
+        renderFiltrosColecao();
+        aplicarFiltrosERenderizar();
+      } catch (err) {
+        console.error('Erro ao carregar coleção:', err);
+        loadingEl.classList.add('hidden');
+        errorEl.classList.remove('hidden');
+        document.getElementById('error-details').textContent = 'Motivo: ' + (err.message || JSON.stringify(err));
+      }
+    }
 
-        function toggleExcluir(checkbox) {
-            const id = checkbox.value; // Pode ser UUID ou Integer, depende da base de dados
-            if (checkbox.checked) {
-                if(!produtosParaExcluir.includes(id)) produtosParaExcluir.push(id);
-            } else {
-                produtosParaExcluir = produtosParaExcluir.filter(pid => pid !== id);
-            }
-            atualizarBotaoApagar();
-        }
-
-        function atualizarBotaoApagar() {
-            document.getElementById('count-selecionados').textContent = produtosParaExcluir.length;
-            document.getElementById('btn-apagar').disabled = produtosParaExcluir.length === 0;
-        }
-
-        async function apagarSelecionados() {
-            if (produtosParaExcluir.length === 0) return;
-            if (!confirm(`Têm a certeza absoluta que quer apagar ${produtosParaExcluir.length} produto(s)? Esta ação não pode ser desfeita.`)) return;
-            
-            const btn = document.getElementById('btn-apagar');
-            const loading = document.getElementById('del-loading');
-            const errorEl = document.getElementById('del-error');
-            
-            btn.disabled = true;
-            loading.classList.remove('hidden');
-            errorEl.classList.add('hidden');
-            
-            try {
-                // Delete API Request - Só da tabela produtos
-                const { error } = await supabaseClient
-                    .from('produtos')
-                    .delete()
-                    .in('id', produtosParaExcluir);
-                    
-                if (error) throw new Error("Erro na Base de Dados: " + error.message);
-                
-                alert('Produtos apagados com sucesso!');
-                fecharModal('modal-excluir');
-                carregarProdutos();
-                
-            } catch (err) {
-                errorEl.textContent = err.message;
-                errorEl.classList.remove('hidden');
-                btn.disabled = false;
-            } finally {
-                loading.classList.add('hidden');
-            }
-        }
-    </script>
+    document.addEventListener('DOMContentLoaded', () => {
+      AtelierUI.montarShell({
+        pagina: 'home',
+        onPesquisa: termo => atualizarPesquisaCatalogo(termo),
+        onCategoria: catId => selecionarCategoria(catId)
+      });
+      inicializarParametrosUrl();
+      atualizarEstadoWhatsAppHome();
+      carregarProdutos();
+    });
+  </script>
 </body>
+
 </html>
