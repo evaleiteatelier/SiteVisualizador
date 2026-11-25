@@ -358,6 +358,10 @@
       parsed && parsed.produtoPromos && typeof parsed.produtoPromos === 'object'
         ? parsed.produtoPromos
         : {};
+    const produtoSkus =
+      parsed && parsed.produtoSkus && typeof parsed.produtoSkus === 'object'
+        ? parsed.produtoSkus
+        : {};
 
     if (parsed && parsed.whatsapp && typeof parsed.whatsapp === 'object') {
       _whatsappRemoto = parsed.whatsapp;
@@ -397,12 +401,16 @@
           rawPromo && typeof rawPromo === 'object' && rawPromo.ativo
             ? { ativo: true, precoPromo: Number(rawPromo.precoPromo) }
             : { ativo: false, precoPromo: null };
+        const skuBruto = produtoSkus[String(row.id)];
+        const skuLimpo = String(skuBruto ?? '').trim().toUpperCase().replace(/[^A-Z0-9._-]+/g, '').slice(0, 32);
+        const skuResolvido = skuLimpo || `EVA-${String(row.id).padStart(4, '0')}`;
         return {
           ...row,
           _categoriaResolvida: categoriaResolvida,
           _bloqueado: bloqueadosSet.has(String(row.id)),
           _imagens: galeria,
-          _promo: promoResolvida
+          _promo: promoResolvida,
+          _sku: skuResolvido
         };
       });
 
@@ -460,9 +468,19 @@
       produtoImagensExtras,
       produtoAcessorios,
       produtoPromos,
+      produtoSkus,
       whatsapp: obterConfigWhatsApp(),
       atelierInfo: obterInfoAtelier()
     };
+  }
+
+  function obterSkuProduto(produto) {
+    if (!produto) return '';
+    if (produto._sku) return String(produto._sku);
+    if (produto.id !== undefined && produto.id !== null) {
+      return `EVA-${String(produto.id).padStart(4, '0')}`;
+    }
+    return '';
   }
 
   function obterPrecosProduto(produto) {
@@ -623,6 +641,7 @@
     obterGaleriaProduto,
     obterAcessoriosProduto,
     obterPrecosProduto,
+    obterSkuProduto,
     carregarEstadoLoja,
     getFavoritos,
     isFavorito,

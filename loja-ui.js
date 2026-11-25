@@ -375,34 +375,37 @@
 
   function montarShell(opcoes = {}) {
     _opcoesShell = Object.assign({ pagina: 'home', onPesquisa: null, onCategoria: null }, opcoes);
+    if (typeof document !== 'undefined' && document.body) {
+      document.body.setAttribute('data-pagina', _opcoesShell.pagina || 'home');
+    }
 
     const headerMount = document.getElementById('loja-header-mount');
     if (headerMount) {
       headerMount.innerHTML = `
-        <div id="loja-announcement-bar" class="bg-[#171614] text-[#f5f0e6] text-[11px] sm:text-xs tracking-[0.14em] uppercase text-center py-2 px-4"></div>
+        <div id="loja-announcement-bar" class="bg-[#171614] text-[#f5f0e6] text-[10px] sm:text-xs tracking-[0.06em] sm:tracking-[0.14em] uppercase text-center py-1.5 sm:py-2 px-3 leading-snug"></div>
         <header class="w-full bg-[#faf8f4]/95 backdrop-blur-md border-b border-stone-200/80 sticky top-0 z-40">
-          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 md:h-20 grid grid-cols-3 items-center">
-            <div class="flex items-center gap-4">
+          <div class="max-w-atelier mx-auto px-4 sm:px-6 lg:px-8 h-16 md:h-20 grid grid-cols-3 md:relative md:flex md:items-center md:justify-between items-center">
+            <div class="relative z-20 flex items-center gap-4">
               <button type="button" onclick="AtelierUI.abrirMenuMobile()" aria-label="Abrir menu" class="md:hidden p-2 -ml-2 text-stone-800 hover:text-[#b8933a] transition-colors">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"></path>
                 </svg>
               </button>
-              <nav class="hidden md:flex items-center gap-4 lg:gap-5 text-[11px] lg:text-xs font-medium tracking-[0.12em] uppercase text-stone-700">
-                <a href="index.html#colecao" class="hover:text-[#b8933a] transition-colors whitespace-nowrap">Coleção</a>
-                <a href="index.html#como-comprar" class="hidden lg:inline-block hover:text-[#b8933a] transition-colors whitespace-nowrap">Como Comprar</a>
-                <a href="contactos.html#localizacao" class="hover:text-[#b8933a] transition-colors whitespace-nowrap">Localização</a>
-                <a href="contactos.html" class="hover:text-[#b8933a] transition-colors whitespace-nowrap">Contactos</a>
+              <nav class="hidden md:flex items-center gap-4 xl:gap-5 text-[11px] xl:text-xs font-medium tracking-[0.12em] uppercase text-stone-700">
+                <a href="index.html#colecao" class="inline-flex items-center py-2 hover:text-[#b8933a] transition-colors whitespace-nowrap">Coleção</a>
+                <a href="index.html#como-comprar" class="hidden xl:inline-flex items-center py-2 hover:text-[#b8933a] transition-colors whitespace-nowrap">Como Comprar</a>
+                <a href="contactos.html#localizacao" class="inline-flex items-center py-2 hover:text-[#b8933a] transition-colors whitespace-nowrap">Localização</a>
+                <a href="contactos.html" class="inline-flex items-center py-2 hover:text-[#b8933a] transition-colors whitespace-nowrap">Contactos</a>
               </nav>
             </div>
 
-            <div class="flex justify-center">
-              <a href="index.html" class="inline-flex items-center py-1" title="Eva Leite Atelier — Página Inicial">
-                <img src="logo.png" alt="Eva Leite Atelier" class="h-10 sm:h-12 md:h-14 object-contain mix-blend-multiply">
+            <div class="flex justify-center md:absolute md:left-1/2 md:-translate-x-1/2 z-10 pointer-events-none">
+              <a href="index.html" class="inline-flex items-center py-1 pointer-events-auto" title="Eva Leite Atelier — Página Inicial">
+                <img src="logo.png" alt="Eva Leite Atelier" class="h-9 sm:h-11 md:h-12 object-contain mix-blend-multiply">
               </a>
             </div>
 
-            <div class="flex items-center justify-end gap-1 sm:gap-2.5">
+            <div class="relative z-20 flex items-center justify-end gap-0.5 sm:gap-2.5">
               <button type="button" onclick="AtelierUI.togglePesquisaHeader()" aria-label="Pesquisar peças" title="Pesquisar peças"
                 class="p-2 rounded-full text-stone-700 hover:bg-stone-200/60 hover:text-stone-950 transition-colors">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
@@ -427,10 +430,10 @@
           <div id="header-search-bar" class="hidden border-t border-stone-200/80 bg-white/95 px-4 py-3">
             <form onsubmit="AtelierUI.submeterPesquisaHeader(event)" class="max-w-2xl mx-auto flex items-center gap-2">
               <div class="relative flex-1">
-                <input type="search" id="header-search-input" placeholder="Pesquisar por vestido, blazer, mala..."
-                  class="w-full pl-4 pr-10 py-2.5 rounded-full border border-stone-300 bg-[#faf8f4] text-sm text-stone-900 focus:outline-none focus:border-[#171614]">
+                <input type="search" id="header-search-input" placeholder="Pesquisar por vestido, blazer, SKU..."
+                  class="w-full pl-4 pr-10 py-2.5 rounded-full border border-stone-300 bg-[#faf8f4] text-base sm:text-sm text-stone-900 focus:outline-none focus:border-[#171614]">
               </div>
-              <button type="submit" class="px-5 py-2.5 rounded-full bg-[#171614] text-white text-xs font-medium uppercase tracking-wider hover:bg-stone-800 transition-colors">
+              <button type="submit" class="px-4 sm:px-5 py-2.5 rounded-full bg-[#171614] text-white text-xs font-medium uppercase tracking-wider hover:bg-stone-800 transition-colors shrink-0">
                 Pesquisar
               </button>
             </form>
@@ -443,7 +446,7 @@
       const anoAtual = new Date().getFullYear();
       footerMount.innerHTML = `
         <footer class="bg-[#f3efe7] border-t border-stone-200/90 mt-auto text-stone-700">
-          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
+          <div class="max-w-atelier mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
             <div>
               <img src="logo.png" alt="Eva Leite Atelier" class="h-11 object-contain mix-blend-multiply mb-4">
               <p class="text-sm text-stone-600 leading-relaxed max-w-sm">
@@ -492,8 +495,8 @@
             </div>
           </div>
 
-          <div class="border-t border-stone-200/80 py-5 px-4 text-xs text-stone-500">
-            <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
+          <div class="border-t border-stone-200/80 py-5 px-4 sm:px-6 lg:px-8 text-xs text-stone-500">
+            <div class="max-w-atelier mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-center sm:text-left">
               <p>&copy; <span id="ano-atual">${anoAtual}</span> Eva Leite Atelier. Todos os direitos reservados.</p>
               <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5">
                 <a href="contactos.html" class="hover:text-stone-900 transition-colors">Contactos</a>
@@ -608,7 +611,7 @@
 
         <div id="modal-preferencias-cookies" onclick="if (event.target === this) AtelierUI.fecharPreferenciasCookies()" role="dialog" aria-modal="true" aria-label="Preferências de Cookies"
           class="hidden fixed inset-0 z-[75] flex items-center justify-center p-4 bg-black/50 backdrop-blur-[2px]">
-          <div class="bg-white rounded-2xl border border-stone-200 max-w-lg w-full p-6 shadow-2xl space-y-4">
+          <div class="bg-white rounded-2xl border border-stone-200 max-w-lg w-full max-h-[90vh] overflow-y-auto p-5 sm:p-6 shadow-2xl space-y-4">
             <div class="flex items-center justify-between gap-3">
               <div>
                 <h2 class="text-lg font-semibold text-stone-900">Preferências de Cookies</h2>
@@ -665,6 +668,46 @@
     atualizarBadgeFavoritos();
     renderListaFavoritos();
     atualizarBannerCookies();
+    renderMenuLateralPoliticas();
+  }
+
+  function renderMenuLateralPoliticas() {
+    const aside = document.getElementById('politicas-sidebar-mount');
+    if (!aside) return;
+    const atual = String(aside.getAttribute('data-policy-page') || '').trim();
+    const paginas = [
+      { id: 'politica-envio', href: 'politica-envio.html', label: 'Política de Envio', desc: 'Transportadoras e expedição' },
+      { id: 'politica-entrega', href: 'politica-entrega.html', label: 'Política de Entrega', desc: 'Prazos, receção e levantamento' },
+      { id: 'rgpd', href: 'rgpd.html', label: 'RGPD & Privacidade', desc: 'Proteção de dados pessoais' },
+      { id: 'cookies', href: 'cookies.html', label: 'Política de Cookies', desc: 'Armazenamento e preferências' }
+    ];
+
+    aside.innerHTML = `
+      <div class="space-y-4">
+        <div class="bg-white rounded-2xl border border-stone-200/90 p-5 shadow-sm">
+          <p class="text-[11px] uppercase tracking-[0.16em] text-[#b8933a] font-semibold mb-3">Apoio &amp; Políticas</p>
+          <nav aria-label="Navegação de políticas" class="space-y-1.5">
+            ${paginas.map(pg => {
+              const ativo = pg.id === atual;
+              return `
+                <a href="${pg.href}" class="block px-3.5 py-2.5 rounded-xl border transition-colors ${ativo ? 'bg-[#171614] border-[#171614] text-white' : 'bg-[#faf8f4] border-transparent hover:border-stone-300 text-stone-800'}">
+                  <span class="block text-xs sm:text-sm font-semibold">${AtelierLoja.escapeHtml(pg.label)}</span>
+                  <span class="block text-[11px] mt-0.5 ${ativo ? 'text-stone-300' : 'text-stone-500'}">${AtelierLoja.escapeHtml(pg.desc)}</span>
+                </a>`;
+            }).join('')}
+          </nav>
+        </div>
+
+        <div class="bg-[#f3efe7]/85 rounded-2xl border border-stone-200/90 p-5 space-y-2.5">
+          <p class="text-[11px] uppercase tracking-[0.16em] text-stone-500 font-semibold">Atendimento Presencial &amp; Online</p>
+          <p class="text-sm font-semibold text-stone-900">Precisa de falar com o Atelier?</p>
+          <p class="text-xs text-stone-600 leading-relaxed">Segunda a Sexta, 09h00 – 18h00 • Praça de Mouzinho de Albuquerque 113, Loja 126, Porto.</p>
+          <div class="pt-1 flex flex-wrap gap-2">
+            <a href="contactos.html" class="px-4 py-2 rounded-full bg-[#171614] text-white text-xs font-semibold hover:bg-stone-800 transition-colors">Contactos</a>
+            <a href="contactos.html#localizacao" class="px-4 py-2 rounded-full bg-white border border-stone-300 text-stone-800 text-xs font-semibold hover:border-stone-900 transition-colors">Localização</a>
+          </div>
+        </div>
+      </div>`;
   }
 
   function atualizarBannerCookies() {
@@ -724,31 +767,20 @@
     const infoPreco = AtelierLoja.obterPrecosProduto(produto);
     const urlProduto = AtelierLoja.getUrlProduto(produto);
     const imgUrl = AtelierLoja.normalizarUrlImagem(produto.imagem_url);
-    const temVinted = AtelierLoja.isVintedDisponivel(produto);
-    const temZap = AtelierLoja.isWhatsAppDisponivel();
     const favorito = AtelierLoja.isFavorito(produto.id);
 
     const badgeEsquerda = infoPreco.emPromo
-      ? `<span class="px-2.5 py-1 rounded-full bg-rose-700 text-white text-[10px] font-semibold tracking-wider uppercase shadow-sm">${infoPreco.descontoPercentagem ? `Promoção -${infoPreco.descontoPercentagem}%` : 'Em Promoção'}</span>`
+      ? `<span class="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full bg-rose-700 text-white text-[9px] sm:text-[10px] font-semibold tracking-wider uppercase shadow-sm">${infoPreco.descontoPercentagem ? `Promoção -${infoPreco.descontoPercentagem}%` : 'Em Promoção'}</span>`
       : mostrarNovo
-        ? '<span class="px-2.5 py-1 rounded-full bg-[#171614]/90 text-white text-[10px] font-semibold tracking-wider uppercase backdrop-blur-sm">Novidade</span>'
-        : `<span class="px-2.5 py-1 rounded-full bg-white/90 text-stone-800 text-[10px] font-medium tracking-wider uppercase backdrop-blur-sm">${AtelierLoja.escapeHtml(cat.label)}</span>`;
+        ? '<span class="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full bg-[#171614]/90 text-white text-[9px] sm:text-[10px] font-semibold tracking-wider uppercase backdrop-blur-sm">Novidade</span>'
+        : `<span class="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full bg-white/90 text-stone-800 text-[9px] sm:text-[10px] font-medium tracking-wider uppercase backdrop-blur-sm">${AtelierLoja.escapeHtml(cat.label)}</span>`;
 
     const precoBlocoHtml = infoPreco.emPromo
       ? `<div class="flex flex-wrap items-baseline gap-1.5 min-w-0">
-           <span class="text-base sm:text-lg font-semibold text-rose-700 whitespace-nowrap">${AtelierLoja.escapeHtml(infoPreco.precoAtualFormatado)}</span>
-           ${infoPreco.precoOriginalFormatado ? `<span class="text-xs text-stone-400 line-through whitespace-nowrap">${AtelierLoja.escapeHtml(infoPreco.precoOriginalFormatado)}</span>` : ''}
+           <span class="text-sm sm:text-lg font-semibold text-rose-700 whitespace-nowrap">${AtelierLoja.escapeHtml(infoPreco.precoAtualFormatado)}</span>
+           ${infoPreco.precoOriginalFormatado ? `<span class="text-[11px] sm:text-xs text-stone-400 line-through whitespace-nowrap">${AtelierLoja.escapeHtml(infoPreco.precoOriginalFormatado)}</span>` : ''}
          </div>`
-      : `<span class="text-base sm:text-lg font-semibold text-stone-950 whitespace-nowrap">${AtelierLoja.escapeHtml(infoPreco.precoAtualFormatado) || 'Sob consulta'}</span>`;
-
-    const chipCanais = `
-      <div class="flex items-center gap-1.5 flex-wrap justify-end">
-        ${temVinted ? '<span class="px-2 py-0.5 rounded-full bg-stone-100 text-stone-700 text-[10px] font-medium border border-stone-200/80">Vinted</span>' : ''}
-        ${temZap
-          ? '<span class="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[10px] font-medium border border-emerald-200/80">WhatsApp</span>'
-          : '<span class="px-2 py-0.5 rounded-full bg-stone-50 text-stone-400 text-[10px] border border-stone-200/60" title="Atendimento por WhatsApp brevemente disponível">WhatsApp brevemente</span>'
-        }
-      </div>`;
+      : `<span class="text-sm sm:text-lg font-semibold text-stone-950 whitespace-nowrap">${AtelierLoja.escapeHtml(infoPreco.precoAtualFormatado) || 'Sob consulta'}</span>`;
 
     return `
       <article class="produto-card flex flex-col h-full overflow-hidden group">
@@ -758,7 +790,7 @@
             : `<div class="w-full h-full flex items-center justify-center text-stone-400 text-xs">Sem fotografia</div>`
           }
 
-          <div class="absolute top-3 left-3 z-10 pointer-events-none">
+          <div class="absolute top-2 left-2 sm:top-3 sm:left-3 z-10 pointer-events-none">
             ${badgeEsquerda}
           </div>
 
@@ -767,7 +799,7 @@
             aria-label="Guardar ${nome} nos favoritos"
             aria-pressed="${favorito ? 'true' : 'false'}"
             onclick="AtelierUI.aoClicarFavorito(event, '${idStr}')"
-            class="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-white/95 shadow-sm flex items-center justify-center transition-all hover:scale-105 ${favorito ? 'text-rose-600' : 'text-stone-700'}">
+            class="absolute top-2 right-2 sm:top-3 sm:right-3 z-10 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/95 shadow-sm flex items-center justify-center transition-all hover:scale-105 ${favorito ? 'text-rose-600' : 'text-stone-700'}">
             ${svgHeart(favorito, 'w-4 h-4')}
           </button>
 
@@ -778,16 +810,16 @@
           </div>
         </a>
 
-        <div class="p-3.5 sm:p-4 flex flex-col flex-grow">
+        <div class="p-3 sm:p-4 flex flex-col flex-grow">
           <span class="text-[10px] sm:text-[11px] uppercase tracking-[0.14em] text-stone-400 font-medium">${AtelierLoja.escapeHtml(cat.label)}</span>
           <a href="${urlProduto}" class="mt-1 block group-hover:text-[#b8933a] transition-colors">
-            <h3 class="text-sm sm:text-base font-semibold text-stone-900 line-clamp-2 leading-snug" title="${nome}">${nome}</h3>
+            <h3 class="text-[13px] sm:text-base font-semibold text-stone-900 line-clamp-2 leading-snug" title="${nome}">${nome}</h3>
           </a>
           ${desc ? `<p class="hidden sm:line-clamp-2 text-xs text-stone-500 mt-1.5 leading-relaxed">${desc}</p>` : ''}
 
-          <div class="mt-auto pt-3 flex items-center justify-between gap-2 border-t border-stone-100">
+          <div class="mt-auto pt-2.5 sm:pt-3 flex items-center justify-between gap-2 border-t border-stone-100">
             ${precoBlocoHtml}
-            ${chipCanais}
+            <span class="text-[11px] font-medium text-stone-400 group-hover:text-stone-900 transition-colors shrink-0">Ver →</span>
           </div>
         </div>
       </article>`;

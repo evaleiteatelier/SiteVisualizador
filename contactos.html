@@ -22,7 +22,7 @@
   <main class="flex-1">
     <!-- Cabeçalho da Página -->
     <section class="border-b border-stone-200/80 bg-gradient-to-b from-[#f3efe7]/70 to-[#faf8f4]">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14">
+      <div class="max-w-atelier mx-auto px-4 sm:px-6 lg:px-8 py-9 sm:py-12">
         <nav class="flex items-center gap-2 text-xs text-stone-500 mb-4" aria-label="Caminho">
           <a href="index.html" class="hover:text-stone-900 transition-colors">Início</a>
           <span>/</span>
@@ -43,7 +43,7 @@
     </section>
 
     <!-- Contactos Diretos + Formulário -->
-    <section id="contactos" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14">
+    <section id="contactos" class="max-w-atelier mx-auto px-4 sm:px-6 lg:px-8 py-9 sm:py-12">
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
         <!-- Cartões de Contacto -->
         <div class="lg:col-span-5 space-y-4">
@@ -100,12 +100,12 @@
               <div>
                 <label for="cnt-nome" class="block text-xs font-semibold text-stone-700 mb-1.5">Nome Completo *</label>
                 <input type="text" id="cnt-nome" required placeholder="O seu nome"
-                  class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 bg-[#faf8f4] text-sm text-stone-900 focus:outline-none focus:border-[#171614] focus:bg-white">
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 bg-[#faf8f4] text-base sm:text-sm text-stone-900 focus:outline-none focus:border-[#171614] focus:bg-white">
               </div>
               <div>
                 <label for="cnt-email" class="block text-xs font-semibold text-stone-700 mb-1.5">Correio Eletrónico *</label>
                 <input type="email" id="cnt-email" required placeholder="nome@exemplo.pt"
-                  class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 bg-[#faf8f4] text-sm text-stone-900 focus:outline-none focus:border-[#171614] focus:bg-white">
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 bg-[#faf8f4] text-base sm:text-sm text-stone-900 focus:outline-none focus:border-[#171614] focus:bg-white">
               </div>
             </div>
 
@@ -113,12 +113,12 @@
               <div>
                 <label for="cnt-telefone" class="block text-xs font-semibold text-stone-700 mb-1.5">Telemóvel (opcional)</label>
                 <input type="tel" id="cnt-telefone" placeholder="+351 9XX XXX XXX"
-                  class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 bg-[#faf8f4] text-sm text-stone-900 focus:outline-none focus:border-[#171614] focus:bg-white">
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 bg-[#faf8f4] text-base sm:text-sm text-stone-900 focus:outline-none focus:border-[#171614] focus:bg-white">
               </div>
               <div>
                 <label for="cnt-assunto" class="block text-xs font-semibold text-stone-700 mb-1.5">Assunto</label>
                 <select id="cnt-assunto"
-                  class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 bg-[#faf8f4] text-sm text-stone-900 focus:outline-none focus:border-[#171614] focus:bg-white">
+                  class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 bg-[#faf8f4] text-base sm:text-sm text-stone-900 focus:outline-none focus:border-[#171614] focus:bg-white">
                   <option value="Informações sobre uma peça">Informações sobre uma peça</option>
                   <option value="Encomenda & Medidas">Encomenda &amp; Medidas</option>
                   <option value="Levantamento no Atelier">Levantamento no Atelier</option>
@@ -130,8 +130,8 @@
 
             <div>
               <label for="cnt-mensagem" class="block text-xs font-semibold text-stone-700 mb-1.5">Mensagem *</label>
-              <textarea id="cnt-mensagem" rows="4" required placeholder="Indique a referência da peça ou em que podemos ajudar..."
-                class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 bg-[#faf8f4] text-sm text-stone-900 focus:outline-none focus:border-[#171614] focus:bg-white"></textarea>
+              <textarea id="cnt-mensagem" rows="4" required placeholder="Indique o SKU da peça ou em que podemos ajudar..."
+                class="w-full px-3.5 py-2.5 rounded-xl border border-stone-300 bg-[#faf8f4] text-base sm:text-sm text-stone-900 focus:outline-none focus:border-[#171614] focus:bg-white"></textarea>
             </div>
 
             <label class="flex items-start gap-2.5 text-xs text-stone-600 cursor-pointer pt-1">
@@ -161,8 +161,8 @@
     </section>
 
     <!-- Localização do Atelier -->
-    <section id="localizacao" class="border-t border-stone-200/80 bg-[#f3efe7]/55 py-12 md:py-16">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="localizacao" class="border-t border-stone-200/80 bg-[#f3efe7]/55 py-10 sm:py-14">
+      <div class="max-w-atelier mx-auto px-4 sm:px-6 lg:px-8">
         <div class="bg-white rounded-3xl border border-stone-200/90 p-6 sm:p-10 shadow-sm grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           <div class="lg:col-span-7 space-y-4">
             <span class="text-[11px] uppercase tracking-[0.18em] text-[#b8933a] font-semibold">Localização do Atelier</span>

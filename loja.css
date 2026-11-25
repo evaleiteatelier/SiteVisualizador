@@ -24,12 +24,17 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
 
 .font-display {
   font-family: var(--font-sans);
   letter-spacing: -0.025em;
+}
+
+.max-w-atelier {
+  max-width: 1400px;
 }
 
 /* Cartões de produto */
@@ -159,4 +164,13 @@ body {
 
 .accordion-chevron {
   transition: transform 0.25s ease;
+}
+
+@media (max-width: 1023px) {
+  body[data-pagina="produto"] #floating-whatsapp-btn {
+    display: none !important;
+  }
+  body[data-pagina="produto"] #cookie-consent-banner {
+    bottom: 78px;
+  }
 }
